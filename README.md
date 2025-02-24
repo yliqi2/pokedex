@@ -12,13 +12,14 @@ A simple Pokedex application built with Flutter that fetches Pokémon data from 
 
 ## Screenshots
 
-![Pokedex Screenshot](screenshot.png) *(Add your own screenshot here)*
+![Pokedex Screenshot](https://github.com/yliqi2/pokedex/blob/main/result/mainscreen.png)
+![Pokedex Screenshot](https://github.com/yliqi2/pokedex/blob/main/result/searchbar.png)
 
 ## Installation
 
 1. **Clone the repository:**
    ```sh
-   git clone https://github.com/yourusername/pokedex.git
+   git clone https://github.com/yliqi2/pokedex.git
    cd pokedex
    ```
 
@@ -58,7 +59,8 @@ This application fetches data from the [PokéAPI](https://pokeapi.co/). It retri
 │   ├── pokeapi.dart
 ├── 📂 widgets/
 │   ├── pokemontile.dart
-├── homescreen.dart
+├── 📂 widgets/
+│   ├── homescreen.dart
 ├── main.dart
 ```
 
@@ -66,15 +68,9 @@ This application fetches data from the [PokéAPI](https://pokeapi.co/). It retri
 
 Contributions are welcome! If you find any bugs or have feature suggestions, feel free to open an issue or submit a pull request.
 
-## License
-
-This project is open-source and available under the [MIT License](LICENSE).
-
----
-
 ### Author
 
 **Your Name**  
-[Your GitHub Profile](https://github.com/yourusername)  
-[Your LinkedIn (Optional)](https://linkedin.com/in/yourprofile)
+[yliqi2](https://github.com/yliqi2)  
+
 
