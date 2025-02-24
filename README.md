@@ -13,7 +13,7 @@ A simple Pokedex application built with Flutter that fetches Pokémon data from 
 ## Screenshots
 
 <p align="center">
-  <img src="https://github.com/yliqi2/pokedex/blob/main/result/mainscreen.png" alt="Pokedex Screenshot" />
+  <img src="https://github.com/yliqi2/pokedex/blob/main/result/mainscreen.png" alt="Pokedex Screenshot" width="400" />
 </p>
 
 
