@@ -1,0 +1,35 @@
+name: pokedex
+description: "A new Flutter project."
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.6.2
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.8
+  http: ^1.3.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/Pokemon Hollow.ttf
+    - assets/Pokemon Solid.ttf
+
+  fonts:
+    - family: Pokemon
+      fonts:
+        - asset: assets/Pokemon Solid.ttf
+    - family: Pokemon2
+      fonts:
+        - asset: assets/Pokemon Hollow.ttf
+
