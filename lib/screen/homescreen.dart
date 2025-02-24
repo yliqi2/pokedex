@@ -13,8 +13,8 @@ class Homescreen extends StatefulWidget {
 class _HomescreenState extends State<Homescreen> {
   List<Pokemon> pokemons = [];
   final Pokeapi api = Pokeapi();
-  int offset = 0; // Mantener un offset para cargar más
-  bool isLoading = false; // Variable para saber si se está cargando más
+  int offset = 0;
+  bool isLoading = false;
   final ScrollController _scrollController = ScrollController();
   TextEditingController searchController = TextEditingController();
   List<Pokemon> searchResults = [];
@@ -22,52 +22,48 @@ class _HomescreenState extends State<Homescreen> {
   @override
   void initState() {
     super.initState();
-    fetchList(); // Cargar los primeros 20 Pokémon
+    fetchList();
 
-    // Detectar cuando se llega al final de la lista
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
-        fetchList(); // Llamar a fetchList cuando se llega al final
+        fetchList();
       }
     });
   }
 
-  // Función para cargar Pokémon
   void fetchList() async {
-    if (isLoading) return; // Si ya se está cargando, no hacer nada
+    if (isLoading) return;
     setState(() {
-      isLoading = true; // Comenzamos a cargar, ponemos isLoading en true
+      isLoading = true;
     });
 
     try {
       List<Pokemon> newPokemons = await api.getPokemon(offset);
       setState(() {
-        pokemons.addAll(newPokemons); // Agregar los nuevos Pokémon a la lista
-        offset += 20; // Aumentar el offset para la siguiente llamada
-        isLoading = false; // Terminó la carga, ponemos isLoading en false
+        pokemons.addAll(newPokemons);
+        offset += 21;
+        isLoading = false;
       });
     } catch (e) {
-      // Manejo de errores
       setState(() {
-        isLoading = false; // Si hubo un error, también dejamos de cargar
+        isLoading = false;
       });
+      // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Failed to load Pokémon')),
       );
     }
   }
 
-  // Función de recarga cuando se hace pull-to-refresh
   Future<void> _onRefresh() async {
     setState(() {
-      pokemons.clear(); // Limpiar la lista de Pokémon
-      offset = 0; // Resetear el offset
+      pokemons.clear();
+      offset = 0;
     });
-    fetchList(); // Cargar los primeros 20 Pokémon
+    fetchList();
   }
 
-  // Función para filtrar resultados de búsqueda
   void filterSearchResults(String query) {
     List<Pokemon> results = [];
     if (query.isEmpty) {
@@ -86,24 +82,23 @@ class _HomescreenState extends State<Homescreen> {
   @override
   void dispose() {
     _scrollController.dispose();
-    searchController
-        .dispose(); // Asegurarnos de liberar el controlador de búsqueda
+    searchController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.red, // Fondo general sigue siendo rojo
+      backgroundColor: Colors.red,
       appBar: AppBar(
-        backgroundColor: Colors.red, // Fondo rojo del AppBar
-        elevation: 0, // Sin sombra
+        backgroundColor: Colors.red,
+        elevation: 0,
         title: Padding(
           padding: const EdgeInsets.symmetric(vertical: 16.0),
           child: Text(
             'Pokedex',
             style: TextStyle(
-              color: Colors.white, // Texto blanco en el título
+              color: Colors.white,
               fontWeight: FontWeight.bold,
               fontSize: 24,
             ),
@@ -113,11 +108,9 @@ class _HomescreenState extends State<Homescreen> {
       ),
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(
-              horizontal: 16.0), // Menos espacio horizontal
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: Column(
             children: [
-              // Barra de búsqueda con fondo blanco
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 16.0),
                 child: TextField(
@@ -125,37 +118,31 @@ class _HomescreenState extends State<Homescreen> {
                   onChanged: filterSearchResults,
                   decoration: InputDecoration(
                     hintText: 'Enter Pokémon name...',
-                    prefixIcon:
-                        Icon(Icons.search, color: Colors.black), // Icono negro
+                    prefixIcon: Icon(Icons.search, color: Colors.black),
                     filled: true,
-                    fillColor:
-                        Colors.white, // Fondo blanco en la barra de búsqueda
+                    fillColor: Colors.white,
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
                       borderSide: BorderSide(color: Colors.grey),
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
-                      borderSide: BorderSide(
-                          color:
-                              Colors.blue), // Borde azul cuando está enfocado
+                      borderSide: BorderSide(color: Colors.blue),
                     ),
                   ),
                 ),
               ),
-
-              // Si no hay resultados de búsqueda, mostrar todos los pokemones
               Expanded(
                 child: RefreshIndicator(
-                  onRefresh: _onRefresh, // Función de pull-to-refresh
+                  onRefresh: _onRefresh,
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 16.0),
                     child: GridView.builder(
                       controller: _scrollController,
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 3,
-                        crossAxisSpacing: 16.0, // Espacio entre columnas
-                        mainAxisSpacing: 16.0, // Espacio entre filas
+                        crossAxisSpacing: 16.0,
+                        mainAxisSpacing: 16.0,
                         childAspectRatio: 0.75,
                       ),
                       itemCount: searchResults.isEmpty
@@ -171,12 +158,9 @@ class _HomescreenState extends State<Homescreen> {
                   ),
                 ),
               ),
-
-              // Si se está cargando, mostrar un indicador de progreso
               if (isLoading)
                 Center(
-                  child:
-                      CircularProgressIndicator(), // Circular cuando se cargan más pokemones
+                  child: CircularProgressIndicator(),
                 ),
             ],
           ),
