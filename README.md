@@ -12,13 +12,17 @@ A simple Pokedex application built with Flutter that fetches Pokémon data from 
 
 ## Screenshots
 
-![Pokedex Screenshot](screenshot.png) *(Add your own screenshot here)*
+<p align="center">
+  <img src="https://github.com/yliqi2/pokedex/blob/main/result/mainscreen.png" alt="Pokedex Screenshot" width="400" />
+</p>
+
+
 
 ## Installation
 
 1. **Clone the repository:**
    ```sh
-   git clone https://github.com/yourusername/pokedex.git
+   git clone https://github.com/yliqi2/pokedex.git
    cd pokedex
    ```
 
@@ -32,14 +36,25 @@ A simple Pokedex application built with Flutter that fetches Pokémon data from 
    flutter run
    ```
 
-## Dependencies
+## Technologies Used & Dependencies
+
+### Technologies Used
+
+- **[Flutter](https://flutter.dev/)**: An open-source mobile application development framework created by Google. It uses the Dart programming language to build native apps for iOS and Android with a single codebase.
+
+- **[Dart](https://dart.dev/)**: A programming language developed by Google, used to write mobile, web, and server applications. It is the base language on which Flutter runs.
+
+- **[http](https://pub.dev/packages/http)**: A Dart package used to make HTTP requests. It allows making network requests, such as those used to fetch data from the PokéAPI in this project.
+
+### Dependencies
 
 This project uses the following dependencies:
 
-- `flutter`: The Flutter SDK.
-- `http`: For making API requests.
+- `flutter`: The Flutter SDK, used for building the mobile application.
+- `http`: A package to make HTTP requests to retrieve data from external APIs (in this case, PokéAPI).
 
 Make sure to check `pubspec.yaml` for the complete list.
+
 
 ## API Usage
 
@@ -58,7 +73,8 @@ This application fetches data from the [PokéAPI](https://pokeapi.co/). It retri
 │   ├── pokeapi.dart
 ├── 📂 widgets/
 │   ├── pokemontile.dart
-├── homescreen.dart
+├── 📂 widgets/
+│   ├── homescreen.dart
 ├── main.dart
 ```
 
@@ -66,15 +82,9 @@ This application fetches data from the [PokéAPI](https://pokeapi.co/). It retri
 
 Contributions are welcome! If you find any bugs or have feature suggestions, feel free to open an issue or submit a pull request.
 
-## License
+## Author
 
-This project is open-source and available under the [MIT License](LICENSE).
+[![yliqi2 GitHub](https://img.shields.io/badge/Visit%20yliqi2%20on%20GitHub-000000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/yliqi2)
 
----
 
-### Author
-
-**Your Name**  
-[Your GitHub Profile](https://github.com/yourusername)  
-[Your LinkedIn (Optional)](https://linkedin.com/in/yourprofile)
 
