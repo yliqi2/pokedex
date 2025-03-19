@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:pokedex/screen/homescreen.dart';
 
 void main() {
@@ -13,15 +12,24 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Pokedex @yliqi_2',
       theme: ThemeData(
+        primarySwatch: Colors.red,
+        scaffoldBackgroundColor: Colors.white,
         appBarTheme: AppBarTheme(
-          titleTextStyle: TextStyle(
-              fontFamily: 'Pokemon', fontSize: 28, color: Colors.white),
+          backgroundColor: Colors.red,
+          foregroundColor: Colors.white,
         ),
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
       ),
+      darkTheme: ThemeData(
+        brightness: Brightness.dark,
+        primarySwatch: Colors.red,
+        scaffoldBackgroundColor: Colors.black87,
+        appBarTheme: AppBarTheme(
+          backgroundColor: Colors.red,
+          foregroundColor: Colors.white,
+        ),
+      ),
+      themeMode: ThemeMode.system,
       home: const Homescreen(),
     );
   }

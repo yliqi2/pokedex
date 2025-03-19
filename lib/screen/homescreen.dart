@@ -2,6 +2,8 @@ import 'package:pokedex/model/pokemon.dart';
 import 'package:pokedex/service/pokeapi.dart';
 import 'package:flutter/material.dart';
 import 'package:pokedex/widgets/pokemontile.dart';
+import 'package:pokedex/widgets/pokemondetail.dart';
+import 'dart:async';
 
 class Homescreen extends StatefulWidget {
   const Homescreen({super.key});
@@ -10,14 +12,16 @@ class Homescreen extends StatefulWidget {
   State<Homescreen> createState() => _HomescreenState();
 }
 
-class _HomescreenState extends State<Homescreen> {
+class _HomescreenState extends State<Homescreen> with TickerProviderStateMixin {
   List<Pokemon> pokemons = [];
+  List<Pokemon> filteredPokemons = [];
   final Pokeapi api = Pokeapi();
   int offset = 0;
   bool isLoading = false;
   final ScrollController _scrollController = ScrollController();
   TextEditingController searchController = TextEditingController();
-  List<Pokemon> searchResults = [];
+  bool isSearching = false;
+  Timer? _debounce;
 
   @override
   void initState() {
@@ -39,66 +43,109 @@ class _HomescreenState extends State<Homescreen> {
     });
 
     try {
-      List<Pokemon> newPokemons = await api.getPokemon(offset);
+      if (isSearching) {
+        List<Pokemon> searchResults =
+            await api.searchPokemon(searchController.text.toLowerCase());
+        setState(() {
+          filteredPokemons.addAll(searchResults);
+          isLoading = false;
+        });
+      } else {
+        List<Pokemon> newPokemons = await api.getPokemon(offset);
+        setState(() {
+          pokemons.addAll(newPokemons);
+          filteredPokemons = pokemons;
+          offset += 20;
+          isLoading = false;
+        });
+      }
+    } catch (e) {
       setState(() {
-        pokemons.addAll(newPokemons);
-        offset += 21;
+        isLoading = false;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to load Pokémon: $e')),
+      );
+    }
+  }
+
+  void searchPokemon(String searchTerm) async {
+    if (isLoading) return;
+    setState(() {
+      isLoading = true;
+    });
+
+    try {
+      List<Pokemon> searchResults = await api.searchPokemon(searchTerm);
+      setState(() {
+        filteredPokemons = searchResults;
         isLoading = false;
       });
     } catch (e) {
       setState(() {
         isLoading = false;
       });
-      // ignore: use_build_context_synchronously
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to load Pokémon')),
-      );
     }
+  }
+
+  void _onSearchChanged(String value) {
+    if (_debounce?.isActive ?? false) _debounce?.cancel();
+    _debounce = Timer(const Duration(milliseconds: 250), () async {
+      setState(() {
+        isSearching = value.isNotEmpty;
+      });
+      if (isSearching) {
+        try {
+          List<Pokemon> searchResults =
+              await api.searchPokemon(value.toLowerCase());
+          setState(() {
+            filteredPokemons = searchResults;
+          });
+        } catch (e) {
+          setState(() {
+            filteredPokemons = [];
+          });
+        }
+      } else {
+        setState(() {
+          filteredPokemons = pokemons;
+        });
+      }
+    });
   }
 
   Future<void> _onRefresh() async {
     setState(() {
       pokemons.clear();
+      filteredPokemons.clear();
       offset = 0;
     });
     fetchList();
-  }
-
-  void filterSearchResults(String query) {
-    List<Pokemon> results = [];
-    if (query.isEmpty) {
-      results = pokemons;
-    } else {
-      results = pokemons.where((pokemon) {
-        return pokemon.name.toLowerCase().contains(query.toLowerCase());
-      }).toList();
-    }
-
-    setState(() {
-      searchResults = results;
-    });
   }
 
   @override
   void dispose() {
     _scrollController.dispose();
     searchController.dispose();
+    _debounce?.cancel();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.red,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: Colors.red,
+        surfaceTintColor: Colors.transparent,
+        backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
         elevation: 0,
         title: Padding(
           padding: const EdgeInsets.symmetric(vertical: 16.0),
           child: Text(
             'Pokedex',
             style: TextStyle(
-              color: Colors.white,
+              fontFamily: 'Pokemon',
+              color: Theme.of(context).appBarTheme.foregroundColor,
               fontWeight: FontWeight.bold,
               fontSize: 24,
             ),
@@ -115,19 +162,16 @@ class _HomescreenState extends State<Homescreen> {
                 padding: const EdgeInsets.symmetric(vertical: 16.0),
                 child: TextField(
                   controller: searchController,
-                  onChanged: filterSearchResults,
+                  onChanged: _onSearchChanged,
                   decoration: InputDecoration(
                     hintText: 'Enter Pokémon name...',
-                    prefixIcon: Icon(Icons.search, color: Colors.black),
+                    prefixIcon: Icon(Icons.search),
                     filled: true,
-                    fillColor: Colors.white,
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
-                      borderSide: BorderSide(color: Colors.grey),
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
-                      borderSide: BorderSide(color: Colors.blue),
                     ),
                   ),
                 ),
@@ -145,14 +189,36 @@ class _HomescreenState extends State<Homescreen> {
                         mainAxisSpacing: 16.0,
                         childAspectRatio: 0.75,
                       ),
-                      itemCount: searchResults.isEmpty
-                          ? pokemons.length
-                          : searchResults.length,
+                      itemCount: isSearching
+                          ? filteredPokemons.length
+                          : pokemons.length,
                       itemBuilder: (context, index) {
-                        final Pokemon pokemon = searchResults.isEmpty
-                            ? pokemons[index]
-                            : searchResults[index];
-                        return Pokemontile(pokemon: pokemon);
+                        final Pokemon pokemon = isSearching
+                            ? filteredPokemons[index]
+                            : pokemons[index];
+                        return GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    PokemonDetail(pokemon: pokemon),
+                              ),
+                            );
+                          },
+                          child: ScaleTransition(
+                            scale: Tween<double>(begin: 0.8, end: 1.0).animate(
+                              CurvedAnimation(
+                                parent: AnimationController(
+                                  duration: Duration(milliseconds: 300),
+                                  vsync: this,
+                                )..forward(),
+                                curve: Curves.easeInOut,
+                              ),
+                            ),
+                            child: Pokemontile(pokemon: pokemon),
+                          ),
+                        );
                       },
                     ),
                   ),
@@ -160,7 +226,11 @@ class _HomescreenState extends State<Homescreen> {
               ),
               if (isLoading)
                 Center(
-                  child: CircularProgressIndicator(),
+                  child: Image.asset(
+                    'assets/loading_pokemon.gif',
+                    height: 50,
+                    width: 50,
+                  ),
                 ),
             ],
           ),
