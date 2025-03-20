@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pokedex/model/pokemon.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class PokemonDetail extends StatelessWidget {
   final Pokemon pokemon;
@@ -24,17 +25,22 @@ class PokemonDetail extends StatelessWidget {
             Center(
               child: Hero(
                 tag: 'pokemon_image_${pokemon.id}',
-                child: Image.network(
-                  pokemon.imageUrl,
+                child: CachedNetworkImage(
+                  imageUrl: pokemon.imageUrl,
                   height: 200,
                   fit: BoxFit.cover,
-                  errorBuilder: (context, error, stackTrace) {
-                    return Icon(
-                      Icons.error,
-                      color: Colors.red,
-                      size: 200,
-                    );
-                  },
+                  placeholder: (context, url) => Center(
+                    child: Image.asset(
+                      'assets/loading_pokemon.gif',
+                      height: 50,
+                      width: 50,
+                    ),
+                  ),
+                  errorWidget: (context, url, error) => Icon(
+                    Icons.error,
+                    color: Colors.red,
+                    size: 200,
+                  ),
                 ),
               ),
             ),

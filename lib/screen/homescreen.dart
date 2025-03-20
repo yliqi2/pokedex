@@ -3,10 +3,12 @@ import 'package:pokedex/service/pokeapi.dart';
 import 'package:flutter/material.dart';
 import 'package:pokedex/widgets/pokemontile.dart';
 import 'package:pokedex/widgets/pokemondetail.dart';
+import 'package:pokedex/widgets/pokemonlisttile.dart';
 import 'dart:async';
 
 class Homescreen extends StatefulWidget {
-  const Homescreen({super.key});
+  final VoidCallback toggleTheme;
+  const Homescreen({super.key, required this.toggleTheme});
 
   @override
   State<Homescreen> createState() => _HomescreenState();
@@ -21,6 +23,8 @@ class _HomescreenState extends State<Homescreen> with TickerProviderStateMixin {
   TextEditingController searchController = TextEditingController();
   Timer? _debounce;
   String selectedType = 'All';
+  String sortBy = 'ID';
+  bool isGridView = true;
 
   @override
   void initState() {
@@ -69,6 +73,12 @@ class _HomescreenState extends State<Homescreen> with TickerProviderStateMixin {
             .contains(searchController.text.toLowerCase());
         return matchesType && matchesName;
       }).toList();
+
+      if (sortBy == 'ID') {
+        filteredPokemons.sort((a, b) => a.id.compareTo(b.id));
+      } else if (sortBy == 'Alphabetical') {
+        filteredPokemons.sort((a, b) => a.name.compareTo(b.name));
+      }
     });
   }
 
@@ -116,6 +126,20 @@ class _HomescreenState extends State<Homescreen> with TickerProviderStateMixin {
           ),
         ),
         centerTitle: true,
+        actions: [
+          IconButton(
+            icon: Icon(isGridView ? Icons.view_list : Icons.grid_view),
+            onPressed: () {
+              setState(() {
+                isGridView = !isGridView;
+              });
+            },
+          ),
+          IconButton(
+            icon: Icon(Icons.brightness_6),
+            onPressed: widget.toggleTheme,
+          ),
+        ],
       ),
       body: SafeArea(
         child: Padding(
@@ -140,40 +164,86 @@ class _HomescreenState extends State<Homescreen> with TickerProviderStateMixin {
                   ),
                 ),
               ),
-              DropdownButton<String>(
-                value: selectedType,
-                onChanged: (String? newValue) {
-                  setState(() {
-                    selectedType = newValue!;
-                  });
-                  filterByType();
-                },
-                items: <String>[
-                  'All',
-                  'Normal',
-                  'Fire',
-                  'Water',
-                  'Electric',
-                  'Grass',
-                  'Ice',
-                  'Fighting',
-                  'Poison',
-                  'Ground',
-                  'Flying',
-                  'Psychic',
-                  'Bug',
-                  'Rock',
-                  'Ghost',
-                  'Dragon',
-                  'Dark',
-                  'Steel',
-                  'Fairy'
-                ].map<DropdownMenuItem<String>>((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: DropdownButtonFormField<String>(
+                        value: selectedType,
+                        onChanged: (String? newValue) {
+                          setState(() {
+                            selectedType = newValue!;
+                          });
+                          filterByType();
+                        },
+                        decoration: InputDecoration(
+                          filled: true,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                        items: <String>[
+                          'All',
+                          'Normal',
+                          'Fire',
+                          'Water',
+                          'Electric',
+                          'Grass',
+                          'Ice',
+                          'Fighting',
+                          'Poison',
+                          'Ground',
+                          'Flying',
+                          'Psychic',
+                          'Bug',
+                          'Rock',
+                          'Ghost',
+                          'Dragon',
+                          'Dark',
+                          'Steel',
+                          'Fairy'
+                        ].map<DropdownMenuItem<String>>((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value),
+                          );
+                        }).toList(),
+                      ),
+                    ),
+                    SizedBox(width: 8),
+                    Expanded(
+                      child: DropdownButtonFormField<String>(
+                        value: sortBy,
+                        onChanged: (String? newValue) {
+                          setState(() {
+                            sortBy = newValue!;
+                          });
+                          filterByType();
+                        },
+                        decoration: InputDecoration(
+                          filled: true,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                        items: <String>['ID', 'Alphabetical']
+                            .map<DropdownMenuItem<String>>((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value),
+                          );
+                        }).toList(),
+                      ),
+                    ),
+                  ],
+                ),
               ),
               Expanded(
                 child: RefreshIndicator(
@@ -214,44 +284,80 @@ class _HomescreenState extends State<Homescreen> with TickerProviderStateMixin {
                               ),
                             ),
                           )
-                        : GridView.builder(
-                            controller: _scrollController,
-                            gridDelegate:
-                                SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 3,
-                              crossAxisSpacing: 16.0,
-                              mainAxisSpacing: 16.0,
-                              childAspectRatio: 0.75,
-                            ),
-                            itemCount: filteredPokemons.length,
-                            itemBuilder: (context, index) {
-                              final Pokemon pokemon = filteredPokemons[index];
-                              return GestureDetector(
-                                onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) =>
-                                          PokemonDetail(pokemon: pokemon),
+                        : isGridView
+                            ? GridView.builder(
+                                controller: _scrollController,
+                                gridDelegate:
+                                    SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 3,
+                                  crossAxisSpacing: 16.0,
+                                  mainAxisSpacing: 16.0,
+                                  childAspectRatio: 0.75,
+                                ),
+                                itemCount: filteredPokemons.length,
+                                itemBuilder: (context, index) {
+                                  final Pokemon pokemon =
+                                      filteredPokemons[index];
+                                  return GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              PokemonDetail(pokemon: pokemon),
+                                        ),
+                                      );
+                                    },
+                                    child: ScaleTransition(
+                                      scale: Tween<double>(begin: 0.8, end: 1.0)
+                                          .animate(
+                                        CurvedAnimation(
+                                          parent: AnimationController(
+                                            duration:
+                                                Duration(milliseconds: 300),
+                                            vsync: this,
+                                          )..forward(),
+                                          curve: Curves.easeInOut,
+                                        ),
+                                      ),
+                                      child: Pokemontile(pokemon: pokemon),
                                     ),
                                   );
                                 },
-                                child: ScaleTransition(
-                                  scale: Tween<double>(begin: 0.8, end: 1.0)
-                                      .animate(
-                                    CurvedAnimation(
-                                      parent: AnimationController(
-                                        duration: Duration(milliseconds: 300),
-                                        vsync: this,
-                                      )..forward(),
-                                      curve: Curves.easeInOut,
+                              )
+                            : ListView.builder(
+                                controller: _scrollController,
+                                itemCount: filteredPokemons.length,
+                                itemBuilder: (context, index) {
+                                  final Pokemon pokemon =
+                                      filteredPokemons[index];
+                                  return GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              PokemonDetail(pokemon: pokemon),
+                                        ),
+                                      );
+                                    },
+                                    child: ScaleTransition(
+                                      scale: Tween<double>(begin: 0.8, end: 1.0)
+                                          .animate(
+                                        CurvedAnimation(
+                                          parent: AnimationController(
+                                            duration:
+                                                Duration(milliseconds: 300),
+                                            vsync: this,
+                                          )..forward(),
+                                          curve: Curves.easeInOut,
+                                        ),
+                                      ),
+                                      child: PokemonListTile(pokemon: pokemon),
                                     ),
-                                  ),
-                                  child: Pokemontile(pokemon: pokemon),
-                                ),
-                              );
-                            },
-                          ),
+                                  );
+                                },
+                              ),
                   ),
                 ),
               ),
