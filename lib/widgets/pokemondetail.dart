@@ -9,6 +9,9 @@ class PokemonDetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final textScaleFactor = screenWidth > 600 ? 1.5 : 1.0;
+
     final typeColors = pokemon.getTypeColors();
     final colors = pokemon.types
         .map((type) => Color(
@@ -29,6 +32,7 @@ class PokemonDetail extends StatelessWidget {
                 style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
+                  fontSize: 24 * textScaleFactor,
                 ),
               ),
               background: Stack(
@@ -104,6 +108,9 @@ class PokemonDetail extends StatelessWidget {
                               ),
                               label: Text(
                                 type[0].toUpperCase() + type.substring(1),
+                                style: TextStyle(
+                                  fontSize: 16 * textScaleFactor,
+                                ),
                               ),
                               backgroundColor: Color(int.parse(
                                       typeColors[type]!.substring(1, 7),
@@ -126,7 +133,7 @@ class PokemonDetail extends StatelessWidget {
                               Text(
                                 'Characteristics:',
                                 style: TextStyle(
-                                  fontSize: 18,
+                                  fontSize: 18 * textScaleFactor,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
@@ -142,14 +149,14 @@ class PokemonDetail extends StatelessWidget {
                                       Text(
                                         '${pokemon.weight} kg',
                                         style: TextStyle(
-                                          fontSize: 16,
+                                          fontSize: 16 * textScaleFactor,
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),
                                       Text(
                                         'Weight',
                                         style: TextStyle(
-                                          fontSize: 12,
+                                          fontSize: 12 * textScaleFactor,
                                           color: Colors.grey,
                                         ),
                                       ),
@@ -169,14 +176,14 @@ class PokemonDetail extends StatelessWidget {
                                       Text(
                                         '${pokemon.height} m',
                                         style: TextStyle(
-                                          fontSize: 16,
+                                          fontSize: 16 * textScaleFactor,
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),
                                       Text(
                                         'Height',
                                         style: TextStyle(
-                                          fontSize: 12,
+                                          fontSize: 12 * textScaleFactor,
                                           color: Colors.grey,
                                         ),
                                       ),
@@ -200,7 +207,7 @@ class PokemonDetail extends StatelessWidget {
                               Text(
                                 'Stats:',
                                 style: TextStyle(
-                                  fontSize: 18,
+                                  fontSize: 18 * textScaleFactor,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
@@ -215,7 +222,7 @@ class PokemonDetail extends StatelessWidget {
                                           child: Text(
                                             entry.key,
                                             style: TextStyle(
-                                              fontSize: 16,
+                                              fontSize: 16 * textScaleFactor,
                                             ),
                                           ),
                                         ),
@@ -223,7 +230,7 @@ class PokemonDetail extends StatelessWidget {
                                         Text(
                                           '${entry.value}',
                                           style: TextStyle(
-                                            fontSize: 16,
+                                            fontSize: 16 * textScaleFactor,
                                             fontWeight: FontWeight.bold,
                                           ),
                                         ),

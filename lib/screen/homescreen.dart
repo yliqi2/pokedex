@@ -151,6 +151,10 @@ class _HomescreenState extends State<Homescreen> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final crossAxisCount = screenWidth > 600 ? 4 : 2;
+    final textScaleFactor = screenWidth > 600 ? 1.5 : 1.0;
+
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
@@ -163,7 +167,7 @@ class _HomescreenState extends State<Homescreen> with TickerProviderStateMixin {
             'Pokedex',
             style: TextStyle(
               fontWeight: FontWeight.bold,
-              fontSize: 24,
+              fontSize: 24 * textScaleFactor,
             ),
           ),
         ),
@@ -277,6 +281,7 @@ class _HomescreenState extends State<Homescreen> with TickerProviderStateMixin {
                                   value,
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
+                                    fontSize: 16 * textScaleFactor,
                                   ),
                                 ),
                               ],
@@ -308,7 +313,10 @@ class _HomescreenState extends State<Homescreen> with TickerProviderStateMixin {
                             .map<DropdownMenuItem<String>>((String value) {
                           return DropdownMenuItem<String>(
                             value: value,
-                            child: Text(value),
+                            child: Text(
+                              value,
+                              style: TextStyle(fontSize: 16 * textScaleFactor),
+                            ),
                           );
                         }).toList(),
                       ),
@@ -346,7 +354,7 @@ class _HomescreenState extends State<Homescreen> with TickerProviderStateMixin {
                                           ? 'No Pokémon found'
                                           : 'No internet connection. Please try again later.',
                                       style: TextStyle(
-                                        fontSize: 18,
+                                        fontSize: 18 * textScaleFactor,
                                         fontWeight: FontWeight.bold,
                                       ),
                                       textAlign: TextAlign.center,
@@ -361,7 +369,7 @@ class _HomescreenState extends State<Homescreen> with TickerProviderStateMixin {
                                 controller: _scrollController,
                                 gridDelegate:
                                     SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 3,
+                                  crossAxisCount: crossAxisCount,
                                   crossAxisSpacing: 16.0,
                                   mainAxisSpacing: 16.0,
                                   childAspectRatio: 0.75,
