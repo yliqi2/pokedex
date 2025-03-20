@@ -28,25 +28,38 @@ class Pokemontile extends StatelessWidget {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(12),
             ),
-            child: Hero(
-              tag: 'pokemon_image_${pokemon.id}',
-              child: CachedNetworkImage(
-                imageUrl: pokemon.imageUrl,
-                fit: BoxFit.contain,
-                height: 100,
-                placeholder: (context, url) => Center(
-                  child: Image.asset(
-                    'assets/loading_pokemon.gif',
-                    height: 50,
-                    width: 50,
+            child: Stack(
+              children: [
+                Positioned.fill(
+                  child: Opacity(
+                    opacity: 0.2,
+                    child: Image.asset(
+                      'assets/pokeball.png',
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
-                errorWidget: (context, url, error) => Icon(
-                  Icons.error,
-                  color: Colors.red,
-                  size: 100,
+                Hero(
+                  tag: 'pokemon_image_${pokemon.id}',
+                  child: CachedNetworkImage(
+                    imageUrl: pokemon.imageUrl,
+                    fit: BoxFit.contain,
+                    height: 100,
+                    placeholder: (context, url) => Center(
+                      child: Image.asset(
+                        'assets/loading_pokemon.gif',
+                        height: 50,
+                        width: 50,
+                      ),
+                    ),
+                    errorWidget: (context, url, error) => Icon(
+                      Icons.error,
+                      color: Colors.red,
+                      size: 100,
+                    ),
+                  ),
                 ),
-              ),
+              ],
             ),
           ),
           Container(
