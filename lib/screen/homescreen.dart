@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:pokedex/widgets/pokemontile.dart';
 import 'package:pokedex/widgets/pokemondetail.dart';
 import 'package:pokedex/widgets/pokemonlisttile.dart';
+import 'package:pokedex/service/connectivity.dart'; // Add this import
 import 'dart:async';
 
 class Homescreen extends StatefulWidget {
@@ -18,6 +19,8 @@ class _HomescreenState extends State<Homescreen> with TickerProviderStateMixin {
   List<Pokemon> pokemons = [];
   List<Pokemon> filteredPokemons = [];
   final Pokeapi api = Pokeapi();
+  final ConnectivityService connectivityService =
+      ConnectivityService(); // Add this line
   bool isLoading = false;
   final ScrollController _scrollController = ScrollController();
   TextEditingController searchController = TextEditingController();
@@ -25,18 +28,26 @@ class _HomescreenState extends State<Homescreen> with TickerProviderStateMixin {
   String selectedType = 'All';
   String sortBy = 'ID';
   bool isGridView = true;
+  bool isConnected = true;
 
   @override
   void initState() {
     super.initState();
-    fetchList();
+    checkConnectivityAndFetchList();
 
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
-        fetchList();
+        checkConnectivityAndFetchList();
       }
     });
+  }
+
+  void checkConnectivityAndFetchList() async {
+    isConnected = await connectivityService.isConnectedToWifi();
+    if (isConnected) {
+      fetchList();
+    }
   }
 
   void fetchList() async {
@@ -129,8 +140,6 @@ class _HomescreenState extends State<Homescreen> with TickerProviderStateMixin {
           child: Text(
             'Pokedex',
             style: TextStyle(
-              fontFamily: 'Pokemon',
-              color: Theme.of(context).appBarTheme.foregroundColor,
               fontWeight: FontWeight.bold,
               fontSize: 24,
             ),
@@ -283,11 +292,12 @@ class _HomescreenState extends State<Homescreen> with TickerProviderStateMixin {
                                     ),
                                     SizedBox(height: 16),
                                     Text(
-                                      'No Pokémon found with that name',
+                                      isConnected
+                                          ? 'No Pokémon found with that name'
+                                          : 'No internet connection. Please try again later.',
                                       style: TextStyle(
                                         fontSize: 18,
                                         fontWeight: FontWeight.bold,
-                                        color: Colors.redAccent,
                                       ),
                                       textAlign: TextAlign.center,
                                     ),
@@ -377,13 +387,29 @@ class _HomescreenState extends State<Homescreen> with TickerProviderStateMixin {
                 Center(
                   child: Image.asset(
                     'assets/loading_pokemon.gif',
-                    height: 50,
-                    width: 50,
+                    height: 200,
+                    width: 200,
                   ),
                 ),
             ],
           ),
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          if (filteredPokemons.isNotEmpty) {
+            final randomPokemon = (filteredPokemons..shuffle()).first;
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => PokemonDetail(pokemon: randomPokemon),
+              ),
+            );
+          }
+        },
+        mini: true,
+        backgroundColor: Colors.red,
+        child: Icon(Icons.shuffle),
       ),
     );
   }

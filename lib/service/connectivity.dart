@@ -5,6 +5,6 @@ class ConnectivityService {
 
   Future<bool> isConnectedToWifi() async {
     var connectivityResult = await _connectivity.checkConnectivity();
-    return connectivityResult == ConnectivityResult.wifi;
+    return connectivityResult != ConnectivityResult.none;
   }
 }

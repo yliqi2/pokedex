@@ -82,7 +82,9 @@ class Pokemontile extends StatelessWidget {
                 Text(
                   pokemon.name[0].toUpperCase() + pokemon.name.substring(1),
                   style: TextStyle(
-                      fontWeight: FontWeight.bold, color: Colors.black87),
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black87,
+                  ),
                   overflow: TextOverflow.ellipsis,
                 ),
                 Row(

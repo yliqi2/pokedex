@@ -128,10 +128,6 @@ class PokemonDetail extends StatelessWidget {
                                 style: TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold,
-                                  color: Theme.of(context)
-                                      .textTheme
-                                      .bodyMedium
-                                      ?.color,
                                 ),
                               ),
                               SizedBox(height: 8),
@@ -206,10 +202,6 @@ class PokemonDetail extends StatelessWidget {
                                 style: TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold,
-                                  color: Theme.of(context)
-                                      .textTheme
-                                      .bodyMedium
-                                      ?.color,
                                 ),
                               ),
                               SizedBox(height: 8),
