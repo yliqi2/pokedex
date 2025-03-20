@@ -1,15 +1,48 @@
 import 'package:flutter/material.dart';
 import 'package:pokedex/model/pokemon.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:pokedex/service/shared_prefs.dart'; // Update this import
 
-class PokemonListTile extends StatelessWidget {
+class PokemonListTile extends StatefulWidget {
   final Pokemon pokemon;
-  const PokemonListTile({super.key, required this.pokemon});
+  final VoidCallback onFavoriteChanged; // Add this line
+  const PokemonListTile(
+      {super.key,
+      required this.pokemon,
+      required this.onFavoriteChanged}); // Update this line
+
+  @override
+  State<PokemonListTile> createState() => _PokemonListTileState();
+}
+
+class _PokemonListTileState extends State<PokemonListTile> {
+  bool isFavorite = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkIfFavorite();
+  }
+
+  Future<void> _checkIfFavorite() async {
+    final favorite = await SharedPrefs.isFavorite(widget.pokemon.id);
+    setState(() {
+      isFavorite = favorite;
+    });
+  }
+
+  Future<void> _toggleFavorite() async {
+    await SharedPrefs.toggleFavorite(widget.pokemon.id);
+    setState(() {
+      isFavorite = !isFavorite;
+    });
+    widget.onFavoriteChanged(); // Add this line
+  }
 
   @override
   Widget build(BuildContext context) {
-    final typeColors = pokemon.getTypeColors();
-    final colors = pokemon.types
+    final typeColors = widget.pokemon.getTypeColors();
+    final colors = widget.pokemon.types
         .map((type) => Color(
             int.parse(typeColors[type]!.substring(1, 7), radix: 16) +
                 0xFF000000))
@@ -38,9 +71,9 @@ class PokemonListTile extends StatelessWidget {
                 ),
               ),
               Hero(
-                tag: 'pokemon_image_${pokemon.id}',
+                tag: 'pokemon_image_${widget.pokemon.id}',
                 child: CachedNetworkImage(
-                  imageUrl: pokemon.imageUrl,
+                  imageUrl: widget.pokemon.imageUrl,
                   fit: BoxFit.contain,
                   height: 80,
                   width: 80,
@@ -66,7 +99,8 @@ class PokemonListTile extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  pokemon.name[0].toUpperCase() + pokemon.name.substring(1),
+                  widget.pokemon.name[0].toUpperCase() +
+                      widget.pokemon.name.substring(1),
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     color: Colors.black87,
@@ -76,7 +110,7 @@ class PokemonListTile extends StatelessWidget {
                 SizedBox(height: 8),
                 Row(
                   children: [
-                    ...pokemon.types.map((type) {
+                    ...widget.pokemon.types.map((type) {
                       return Container(
                         margin: EdgeInsets.symmetric(horizontal: 2),
                         padding:
@@ -97,11 +131,13 @@ class PokemonListTile extends StatelessWidget {
                     }),
                     Spacer(),
                     IconButton(
-                      icon: Icon(Icons.favorite_border_rounded,
-                          color: Colors.red),
-                      onPressed: () {
-                        // Add to favorites logic here
-                      },
+                      icon: Icon(
+                        isFavorite
+                            ? Icons.favorite_rounded
+                            : Icons.favorite_border_rounded,
+                        color: Colors.red,
+                      ),
+                      onPressed: _toggleFavorite,
                     ),
                   ],
                 ),

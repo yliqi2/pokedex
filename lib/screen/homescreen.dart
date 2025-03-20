@@ -1,11 +1,11 @@
 import 'package:pokedex/model/pokemon.dart';
-import 'package:pokedex/screen/fav.dart';
 import 'package:pokedex/service/pokeapi.dart';
 import 'package:flutter/material.dart';
 import 'package:pokedex/widgets/pokemontile.dart';
 import 'package:pokedex/widgets/pokemondetail.dart';
 import 'package:pokedex/widgets/pokemonlisttile.dart';
 import 'package:pokedex/service/connectivity.dart'; // Add this import
+import 'package:pokedex/service/shared_prefs.dart'; // Add this import
 import 'dart:async';
 
 class Homescreen extends StatefulWidget {
@@ -30,6 +30,7 @@ class _HomescreenState extends State<Homescreen> with TickerProviderStateMixin {
   String sortBy = 'ID';
   bool isGridView = true;
   bool isConnected = true;
+  bool showFavorites = false; // Add this line
 
   @override
   void initState() {
@@ -75,7 +76,9 @@ class _HomescreenState extends State<Homescreen> with TickerProviderStateMixin {
     }
   }
 
-  void filterByType() {
+  void filterByType() async {
+    final favoritePokemons = await SharedPrefs.getFavoritePokemons();
+
     setState(() {
       filteredPokemons = pokemons.where((pokemon) {
         final matchesType = selectedType == 'All' ||
@@ -83,7 +86,9 @@ class _HomescreenState extends State<Homescreen> with TickerProviderStateMixin {
         final matchesName = pokemon.name
             .toLowerCase()
             .contains(searchController.text.toLowerCase());
-        return matchesType && matchesName;
+        final matchesFavorite =
+            !showFavorites || favoritePokemons.contains(pokemon.id.toString());
+        return matchesType && matchesName && matchesFavorite;
       }).toList();
 
       if (sortBy == 'ID') {
@@ -128,6 +133,10 @@ class _HomescreenState extends State<Homescreen> with TickerProviderStateMixin {
     return null;
   }
 
+  void _onFavoriteChanged() {
+    filterByType();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -149,14 +158,12 @@ class _HomescreenState extends State<Homescreen> with TickerProviderStateMixin {
         centerTitle: true,
         actions: [
           IconButton(
-            icon: Icon(Icons.favorite),
+            icon: Icon(showFavorites ? Icons.favorite : Icons.favorite_border),
             onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => Fav(),
-                ),
-              );
+              setState(() {
+                showFavorites = !showFavorites;
+              });
+              filterByType();
             },
           ),
           IconButton(
@@ -305,7 +312,7 @@ class _HomescreenState extends State<Homescreen> with TickerProviderStateMixin {
                                     SizedBox(height: 16),
                                     Text(
                                       isConnected
-                                          ? 'No Pokémon found with that name'
+                                          ? 'No Pokémon found'
                                           : 'No internet connection. Please try again later.',
                                       style: TextStyle(
                                         fontSize: 18,
@@ -354,7 +361,11 @@ class _HomescreenState extends State<Homescreen> with TickerProviderStateMixin {
                                           curve: Curves.easeInOut,
                                         ),
                                       ),
-                                      child: Pokemontile(pokemon: pokemon),
+                                      child: Pokemontile(
+                                        pokemon: pokemon,
+                                        onFavoriteChanged:
+                                            _onFavoriteChanged, // Update this line
+                                      ),
                                     ),
                                   );
                                 },
@@ -387,7 +398,11 @@ class _HomescreenState extends State<Homescreen> with TickerProviderStateMixin {
                                           curve: Curves.easeInOut,
                                         ),
                                       ),
-                                      child: PokemonListTile(pokemon: pokemon),
+                                      child: PokemonListTile(
+                                        pokemon: pokemon,
+                                        onFavoriteChanged:
+                                            _onFavoriteChanged, // Update this line
+                                      ),
                                     ),
                                   );
                                 },
