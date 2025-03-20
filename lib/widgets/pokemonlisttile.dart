@@ -88,8 +88,8 @@ class PokemonListTile extends StatelessWidget {
                       ),
                       child: Image.asset(
                         'assets/icons/$type.webp',
-                        height: 16,
-                        width: 16,
+                        height: 24,
+                        width: 24,
                       ),
                     );
                   }).toList(),

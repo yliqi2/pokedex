@@ -36,7 +36,11 @@ class PokemonDetail extends StatelessWidget {
                   Container(
                     decoration: BoxDecoration(
                       gradient: colors.length > 1
-                          ? LinearGradient(colors: colors)
+                          ? LinearGradient(
+                              colors: colors,
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                            )
                           : null,
                       color: colors.length == 1 ? colors[0] : null,
                     ),
@@ -213,23 +217,14 @@ class PokemonDetail extends StatelessWidget {
                                     padding: const EdgeInsets.symmetric(
                                         vertical: 4.0),
                                     child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Text(
-                                          entry.key,
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                          ),
-                                        ),
-                                        SizedBox(width: 8),
                                         Expanded(
-                                          child: LinearProgressIndicator(
-                                            value: entry.value / 100,
-                                            backgroundColor: Colors.grey[300],
-                                            color: colors.length > 1
-                                                ? colors[1]
-                                                : colors[0],
+                                          flex: 2,
+                                          child: Text(
+                                            entry.key,
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                            ),
                                           ),
                                         ),
                                         SizedBox(width: 8),
@@ -238,6 +233,45 @@ class PokemonDetail extends StatelessWidget {
                                           style: TextStyle(
                                             fontSize: 16,
                                             fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        SizedBox(width: 8),
+                                        Expanded(
+                                          flex: 5,
+                                          child: Stack(
+                                            children: [
+                                              Container(
+                                                height: 6,
+                                                decoration: BoxDecoration(
+                                                  color: Colors.grey[300],
+                                                  borderRadius:
+                                                      BorderRadius.circular(3),
+                                                ),
+                                              ),
+                                              FractionallySizedBox(
+                                                widthFactor: entry.value / 100,
+                                                child: Container(
+                                                  height: 6,
+                                                  decoration: BoxDecoration(
+                                                    gradient: colors.length > 1
+                                                        ? LinearGradient(
+                                                            colors: colors,
+                                                            begin: Alignment
+                                                                .centerLeft,
+                                                            end: Alignment
+                                                                .centerRight,
+                                                          )
+                                                        : null,
+                                                    color: colors.length == 1
+                                                        ? colors[0]
+                                                        : null,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            3),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
                                           ),
                                         ),
                                       ],

@@ -105,6 +105,17 @@ class _HomescreenState extends State<Homescreen> with TickerProviderStateMixin {
     super.dispose();
   }
 
+  Color? getTypeColor(String type) {
+    final typeColors =
+        pokemons.isNotEmpty ? pokemons.first.getTypeColors() : {};
+    if (typeColors.containsKey(type.toLowerCase())) {
+      return Color(int.parse(typeColors[type.toLowerCase()]!.substring(1, 7),
+              radix: 16) +
+          0xFF000000);
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -179,6 +190,7 @@ class _HomescreenState extends State<Homescreen> with TickerProviderStateMixin {
                         },
                         decoration: InputDecoration(
                           filled: true,
+                          fillColor: getTypeColor(selectedType),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),
