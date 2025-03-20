@@ -25,6 +25,8 @@ flutter:
 
   assets:
     - assets/loading_pokemon.gif
+    - assets/
+    - assets/icons/
     - assets/Pokemon Hollow.ttf
     - assets/Pokemon Solid.ttf
 

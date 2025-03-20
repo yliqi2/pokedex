@@ -19,19 +19,21 @@ class Pokemon {
 
   factory Pokemon.fromJson(Map<String, dynamic> json) {
     return Pokemon(
-      id: json['id'],
-      name: json['name'],
-      imageUrl: json['sprites']['other']['official-artwork']['front_default'],
-      weight: json['weight'] / 10,
-      height: json['height'] / 10,
-      types: (json['types'] as List)
-          .map((type) => type['type']['name'] as String)
-          .toList(),
+      id: json['id'] ?? 0,
+      name: json['name'] ?? 'Unknown',
+      imageUrl:
+          json['sprites']['other']['official-artwork']['front_default'] ?? '',
+      weight: (json['weight'] ?? 0) / 10,
+      height: (json['height'] ?? 0) / 10,
+      types: (json['types'] as List?)
+              ?.map((type) => type['type']['name'] as String)
+              .toList() ??
+          [],
       stats: {
-        "HP": json['stats'][0]['base_stat'],
-        "Attack": json['stats'][1]['base_stat'],
-        "Defense": json['stats'][2]['base_stat'],
-        "Speed": json['stats'][5]['base_stat'],
+        "HP": json['stats']?[0]['base_stat'] ?? 0,
+        "Attack": json['stats']?[1]['base_stat'] ?? 0,
+        "Defense": json['stats']?[2]['base_stat'] ?? 0,
+        "Speed": json['stats']?[5]['base_stat'] ?? 0,
       },
     );
   }

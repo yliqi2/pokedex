@@ -22,10 +22,20 @@ class PokemonDetail extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Center(
-              child: Image.network(
-                pokemon.imageUrl,
-                height: 200,
-                fit: BoxFit.cover,
+              child: Hero(
+                tag: 'pokemon_image_${pokemon.id}',
+                child: Image.network(
+                  pokemon.imageUrl,
+                  height: 200,
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) {
+                    return Icon(
+                      Icons.error,
+                      color: Colors.red,
+                      size: 200,
+                    );
+                  },
+                ),
               ),
             ),
             SizedBox(height: 16),
@@ -44,7 +54,14 @@ class PokemonDetail extends StatelessWidget {
               spacing: 8.0,
               children: pokemon.types.map((type) {
                 return Chip(
-                  label: Text(type),
+                  avatar: Image.asset(
+                    'assets/icons/$type.webp',
+                    height: 16,
+                    width: 16,
+                  ),
+                  label: Text(
+                    type[0].toUpperCase() + type.substring(1),
+                  ),
                   backgroundColor: typeColors[type],
                   labelStyle: TextStyle(color: Colors.white),
                 );
@@ -84,7 +101,6 @@ class PokemonDetail extends StatelessWidget {
                     trailing: Text('${entry.value}'),
                   ),
                 )),
-            // Add more details as needed
           ],
         ),
       ),

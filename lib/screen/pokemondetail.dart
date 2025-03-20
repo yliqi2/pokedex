@@ -28,6 +28,13 @@ class PokemonDetail extends StatelessWidget {
                   pokemon.imageUrl,
                   height: 200,
                   fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) {
+                    return Icon(
+                      Icons.error,
+                      color: Colors.red,
+                      size: 200,
+                    );
+                  },
                 ),
               ),
             ),

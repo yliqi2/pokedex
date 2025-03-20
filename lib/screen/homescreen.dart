@@ -16,12 +16,11 @@ class _HomescreenState extends State<Homescreen> with TickerProviderStateMixin {
   List<Pokemon> pokemons = [];
   List<Pokemon> filteredPokemons = [];
   final Pokeapi api = Pokeapi();
-  int offset = 0;
   bool isLoading = false;
   final ScrollController _scrollController = ScrollController();
   TextEditingController searchController = TextEditingController();
-  bool isSearching = false;
   Timer? _debounce;
+  String selectedType = 'All';
 
   @override
   void initState() {
@@ -43,22 +42,13 @@ class _HomescreenState extends State<Homescreen> with TickerProviderStateMixin {
     });
 
     try {
-      if (isSearching) {
-        List<Pokemon> searchResults =
-            await api.searchPokemon(searchController.text.toLowerCase());
-        setState(() {
-          filteredPokemons.addAll(searchResults);
-          isLoading = false;
-        });
-      } else {
-        List<Pokemon> newPokemons = await api.getPokemon(offset);
-        setState(() {
-          pokemons.addAll(newPokemons);
-          filteredPokemons = pokemons;
-          offset += 20;
-          isLoading = false;
-        });
-      }
+      List<Pokemon> newPokemons = await api.getPokemon();
+      setState(() {
+        pokemons = newPokemons;
+        filteredPokemons = pokemons;
+        isLoading = false;
+      });
+      filterByType();
     } catch (e) {
       setState(() {
         isLoading = false;
@@ -69,48 +59,23 @@ class _HomescreenState extends State<Homescreen> with TickerProviderStateMixin {
     }
   }
 
-  void searchPokemon(String searchTerm) async {
-    if (isLoading) return;
+  void filterByType() {
     setState(() {
-      isLoading = true;
+      filteredPokemons = pokemons.where((pokemon) {
+        final matchesType = selectedType == 'All' ||
+            pokemon.types.contains(selectedType.toLowerCase());
+        final matchesName = pokemon.name
+            .toLowerCase()
+            .contains(searchController.text.toLowerCase());
+        return matchesType && matchesName;
+      }).toList();
     });
-
-    try {
-      List<Pokemon> searchResults = await api.searchPokemon(searchTerm);
-      setState(() {
-        filteredPokemons = searchResults;
-        isLoading = false;
-      });
-    } catch (e) {
-      setState(() {
-        isLoading = false;
-      });
-    }
   }
 
   void _onSearchChanged(String value) {
     if (_debounce?.isActive ?? false) _debounce?.cancel();
-    _debounce = Timer(const Duration(milliseconds: 250), () async {
-      setState(() {
-        isSearching = value.isNotEmpty;
-      });
-      if (isSearching) {
-        try {
-          List<Pokemon> searchResults =
-              await api.searchPokemon(value.toLowerCase());
-          setState(() {
-            filteredPokemons = searchResults;
-          });
-        } catch (e) {
-          setState(() {
-            filteredPokemons = [];
-          });
-        }
-      } else {
-        setState(() {
-          filteredPokemons = pokemons;
-        });
-      }
+    _debounce = Timer(const Duration(milliseconds: 250), () {
+      filterByType();
     });
   }
 
@@ -118,7 +83,6 @@ class _HomescreenState extends State<Homescreen> with TickerProviderStateMixin {
     setState(() {
       pokemons.clear();
       filteredPokemons.clear();
-      offset = 0;
     });
     fetchList();
   }
@@ -176,51 +140,118 @@ class _HomescreenState extends State<Homescreen> with TickerProviderStateMixin {
                   ),
                 ),
               ),
+              DropdownButton<String>(
+                value: selectedType,
+                onChanged: (String? newValue) {
+                  setState(() {
+                    selectedType = newValue!;
+                  });
+                  filterByType();
+                },
+                items: <String>[
+                  'All',
+                  'Normal',
+                  'Fire',
+                  'Water',
+                  'Electric',
+                  'Grass',
+                  'Ice',
+                  'Fighting',
+                  'Poison',
+                  'Ground',
+                  'Flying',
+                  'Psychic',
+                  'Bug',
+                  'Rock',
+                  'Ghost',
+                  'Dragon',
+                  'Dark',
+                  'Steel',
+                  'Fairy'
+                ].map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+              ),
               Expanded(
                 child: RefreshIndicator(
                   onRefresh: _onRefresh,
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 16.0),
-                    child: GridView.builder(
-                      controller: _scrollController,
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 3,
-                        crossAxisSpacing: 16.0,
-                        mainAxisSpacing: 16.0,
-                        childAspectRatio: 0.75,
-                      ),
-                      itemCount: isSearching
-                          ? filteredPokemons.length
-                          : pokemons.length,
-                      itemBuilder: (context, index) {
-                        final Pokemon pokemon = isSearching
-                            ? filteredPokemons[index]
-                            : pokemons[index];
-                        return GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    PokemonDetail(pokemon: pokemon),
+                    child: filteredPokemons.isEmpty && !isLoading
+                        ? Center(
+                            child: Card(
+                              color: Colors.white.withAlpha(51),
+                              elevation: 4,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
                               ),
-                            );
-                          },
-                          child: ScaleTransition(
-                            scale: Tween<double>(begin: 0.8, end: 1.0).animate(
-                              CurvedAnimation(
-                                parent: AnimationController(
-                                  duration: Duration(milliseconds: 300),
-                                  vsync: this,
-                                )..forward(),
-                                curve: Curves.easeInOut,
+                              child: Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Image.asset(
+                                      'assets/pokemon.png',
+                                      height: 100,
+                                      width: 100,
+                                    ),
+                                    SizedBox(height: 16),
+                                    Text(
+                                      'No Pokémon found with that name',
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.redAccent,
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
-                            child: Pokemontile(pokemon: pokemon),
+                          )
+                        : GridView.builder(
+                            controller: _scrollController,
+                            gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 3,
+                              crossAxisSpacing: 16.0,
+                              mainAxisSpacing: 16.0,
+                              childAspectRatio: 0.75,
+                            ),
+                            itemCount: filteredPokemons.length,
+                            itemBuilder: (context, index) {
+                              final Pokemon pokemon = filteredPokemons[index];
+                              return GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          PokemonDetail(pokemon: pokemon),
+                                    ),
+                                  );
+                                },
+                                child: ScaleTransition(
+                                  scale: Tween<double>(begin: 0.8, end: 1.0)
+                                      .animate(
+                                    CurvedAnimation(
+                                      parent: AnimationController(
+                                        duration: Duration(milliseconds: 300),
+                                        vsync: this,
+                                      )..forward(),
+                                      curve: Curves.easeInOut,
+                                    ),
+                                  ),
+                                  child: Pokemontile(pokemon: pokemon),
+                                ),
+                              );
+                            },
                           ),
-                        );
-                      },
-                    ),
                   ),
                 ),
               ),

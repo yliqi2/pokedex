@@ -8,7 +8,7 @@ class Pokemontile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final typeColors = pokemon.getTypeColors();
-    final List<Color> colors = pokemon.types
+    final colors = pokemon.types
         .map((type) => Color(
             int.parse(typeColors[type]!.substring(1, 7), radix: 16) +
                 0xFF000000))
@@ -21,7 +21,6 @@ class Pokemontile extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
       ),
       child: Column(
-        mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           Container(
@@ -34,6 +33,13 @@ class Pokemontile extends StatelessWidget {
                 pokemon.imageUrl,
                 fit: BoxFit.contain,
                 height: 100,
+                errorBuilder: (context, error, stackTrace) {
+                  return Icon(
+                    Icons.error,
+                    color: Colors.red,
+                    size: 100,
+                  );
+                },
               ),
             ),
           ),
@@ -55,8 +61,7 @@ class Pokemontile extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  pokemon.name.substring(0, 1).toUpperCase() +
-                      pokemon.name.substring(1, pokemon.name.length),
+                  pokemon.name[0].toUpperCase() + pokemon.name.substring(1),
                   style: TextStyle(
                       fontWeight: FontWeight.bold, color: Colors.black87),
                   overflow: TextOverflow.ellipsis,
@@ -68,18 +73,16 @@ class Pokemontile extends StatelessWidget {
                       margin: EdgeInsets.symmetric(horizontal: 2),
                       padding: EdgeInsets.symmetric(horizontal: 4, vertical: 2),
                       decoration: BoxDecoration(
-                        color: typeColors[type] != null
-                            ? Color(int.parse(typeColors[type]!.substring(1, 7),
-                                    radix: 16) +
-                                0xFF000000)
-                            : Theme.of(context).primaryColorLight,
+                        color: Color(int.parse(
+                                typeColors[type]!.substring(1, 7),
+                                radix: 16) +
+                            0xFF000000),
                         borderRadius: BorderRadius.circular(4),
                       ),
-                      child: Text(
-                        type.substring(0, 1).toUpperCase() +
-                            type.substring(1, type.length),
-                        style: TextStyle(fontSize: 12, color: Colors.white),
-                        overflow: TextOverflow.ellipsis,
+                      child: Image.asset(
+                        'assets/icons/$type.webp',
+                        height: 16,
+                        width: 16,
                       ),
                     );
                   }).toList(),
