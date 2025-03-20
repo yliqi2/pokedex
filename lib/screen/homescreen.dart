@@ -36,13 +36,6 @@ class _HomescreenState extends State<Homescreen> with TickerProviderStateMixin {
   void initState() {
     super.initState();
     checkConnectivityAndFetchList();
-
-    _scrollController.addListener(() {
-      if (_scrollController.position.pixels ==
-          _scrollController.position.maxScrollExtent) {
-        checkConnectivityAndFetchList();
-      }
-    });
   }
 
   void checkConnectivityAndFetchList() async {
@@ -123,12 +116,31 @@ class _HomescreenState extends State<Homescreen> with TickerProviderStateMixin {
   }
 
   Color? getTypeColor(String type) {
-    final typeColors =
-        pokemons.isNotEmpty ? pokemons.first.getTypeColors() : {};
+    const typeColors = {
+      'normal': '#A8A77A',
+      'fire': '#EE8130',
+      'water': '#6390F0',
+      'electric': '#F7D02C',
+      'grass': '#7AC74C',
+      'ice': '#96D9D6',
+      'fighting': '#C22E28',
+      'poison': '#A33EA1',
+      'ground': '#E2BF65',
+      'flying': '#A98FF3',
+      'psychic': '#F95587',
+      'bug': '#A6B91A',
+      'rock': '#B6A136',
+      'ghost': '#735797',
+      'dragon': '#6F35FC',
+      'dark': '#705746',
+      'steel': '#B7B7CE',
+      'fairy': '#D685AD',
+    };
+
     if (typeColors.containsKey(type.toLowerCase())) {
-      return Color(int.parse(typeColors[type.toLowerCase()]!.substring(1, 7),
-              radix: 16) +
-          0xFF000000);
+      return Color(
+          int.parse(typeColors[type.toLowerCase()]!.substring(1), radix: 16) +
+              0xFF000000);
     }
     return null;
   }
@@ -218,7 +230,7 @@ class _HomescreenState extends State<Homescreen> with TickerProviderStateMixin {
                         },
                         decoration: InputDecoration(
                           filled: true,
-                          fillColor: getTypeColor(selectedType),
+                          fillColor: getTypeColor(selectedType.toLowerCase()),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),
@@ -249,7 +261,27 @@ class _HomescreenState extends State<Homescreen> with TickerProviderStateMixin {
                         ].map<DropdownMenuItem<String>>((String value) {
                           return DropdownMenuItem<String>(
                             value: value,
-                            child: Text(value),
+                            child: Row(
+                              children: [
+                                if (value != 'All')
+                                  Image.asset(
+                                    'assets/icons/${value.toLowerCase()}.webp',
+                                    width: 24,
+                                    height: 24,
+                                  ),
+                                (value != 'All')
+                                    ? SizedBox(width: 8)
+                                    : SizedBox(
+                                        width: 32,
+                                      ),
+                                Text(
+                                  value,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
                           );
                         }).toList(),
                       ),
