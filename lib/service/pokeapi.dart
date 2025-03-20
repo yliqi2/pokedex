@@ -7,7 +7,7 @@ class Pokeapi {
   final String baseUrl = 'https://pokeapi.co/api/v2/pokemon';
 
   Future<List<Pokemon>> getPokemon() async {
-    final url = Uri.parse('$baseUrl?limit=100000');
+    final url = Uri.parse('$baseUrl?limit=20');
     final response = await http.get(url);
 
     if (response.statusCode == 200) {

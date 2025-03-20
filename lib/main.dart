@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:pokedex/screen/homescreen.dart';
+import 'package:pokedex/service/noti_service.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  NotiService().init();
   runApp(const MyApp());
 }
 

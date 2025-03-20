@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pokedex/model/pokemon.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:pokedex/service/noti_service.dart';
 import 'package:pokedex/service/shared_prefs.dart'; // Update this import
 
 class Pokemontile extends StatefulWidget {
@@ -36,7 +37,13 @@ class _PokemontileState extends State<Pokemontile> {
     setState(() {
       isFavorite = !isFavorite;
     });
-    widget.onFavoriteChanged(); // Add this line
+    widget.onFavoriteChanged();
+    NotiService().showNotification(
+      id: widget.pokemon.id,
+      title: isFavorite
+          ? '${widget.pokemon.name} added to favorites'
+          : '${widget.pokemon.name} removed from favorites',
+    ); // Add this line
   }
 
   @override

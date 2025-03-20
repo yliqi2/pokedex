@@ -167,7 +167,6 @@ class _HomescreenState extends State<Homescreen> with TickerProviderStateMixin {
             ),
           ),
         ),
-        centerTitle: true,
         actions: [
           IconButton(
             icon: Icon(showFavorites ? Icons.favorite : Icons.favorite_border),
