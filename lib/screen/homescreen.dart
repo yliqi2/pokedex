@@ -1,4 +1,5 @@
 import 'package:pokedex/model/pokemon.dart';
+import 'package:pokedex/screen/fav.dart';
 import 'package:pokedex/service/pokeapi.dart';
 import 'package:flutter/material.dart';
 import 'package:pokedex/widgets/pokemontile.dart';
@@ -147,6 +148,17 @@ class _HomescreenState extends State<Homescreen> with TickerProviderStateMixin {
         ),
         centerTitle: true,
         actions: [
+          IconButton(
+            icon: Icon(Icons.favorite),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => Fav(),
+                ),
+              );
+            },
+          ),
           IconButton(
             icon: Icon(isGridView ? Icons.view_list : Icons.grid_view),
             onPressed: () {

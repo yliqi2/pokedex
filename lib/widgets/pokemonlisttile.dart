@@ -75,24 +75,35 @@ class PokemonListTile extends StatelessWidget {
                 ),
                 SizedBox(height: 8),
                 Row(
-                  children: pokemon.types.map((type) {
-                    return Container(
-                      margin: EdgeInsets.symmetric(horizontal: 2),
-                      padding: EdgeInsets.symmetric(horizontal: 4, vertical: 2),
-                      decoration: BoxDecoration(
-                        color: Color(int.parse(
-                                typeColors[type]!.substring(1, 7),
-                                radix: 16) +
-                            0xFF000000),
-                        borderRadius: BorderRadius.circular(4),
-                      ),
-                      child: Image.asset(
-                        'assets/icons/$type.webp',
-                        height: 24,
-                        width: 24,
-                      ),
-                    );
-                  }).toList(),
+                  children: [
+                    ...pokemon.types.map((type) {
+                      return Container(
+                        margin: EdgeInsets.symmetric(horizontal: 2),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+                        decoration: BoxDecoration(
+                          color: Color(int.parse(
+                                  typeColors[type]!.substring(1, 7),
+                                  radix: 16) +
+                              0xFF000000),
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                        child: Image.asset(
+                          'assets/icons/$type.webp',
+                          height: 24,
+                          width: 24,
+                        ),
+                      );
+                    }),
+                    Spacer(),
+                    IconButton(
+                      icon: Icon(Icons.favorite_border_rounded,
+                          color: Colors.red),
+                      onPressed: () {
+                        // Add to favorites logic here
+                      },
+                    ),
+                  ],
                 ),
               ],
             ),
