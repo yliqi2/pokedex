@@ -44,8 +44,6 @@ class _PokemontileState extends State<Pokemontile> {
   Future<void> _toggleFavorite() async {
     final newFavoriteStatus = !isFavorite;
     await SharedPrefs.toggleFavorite(widget.pokemon.id);
-    print(widget.pokemon.id);
-    print(widget.pokemon.name);
     setState(() {
       isFavorite = newFavoriteStatus;
     });

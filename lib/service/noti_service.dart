@@ -5,9 +5,9 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 class NotiService {
   final notifactionsPlugin = FlutterLocalNotificationsPlugin();
 
-  bool _isInitialized = false;
+  bool isInitialized = false;
 
-  bool get initialized => _isInitialized;
+  bool get initialized => isInitialized;
 
   Future<void> init() async {
     const androidInit = AndroidInitializationSettings('@mipmap/ic_launcher');
