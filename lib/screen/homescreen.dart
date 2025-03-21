@@ -31,15 +31,6 @@ class _HomescreenState extends State<Homescreen> with TickerProviderStateMixin {
   bool isConnected = true;
   bool showFavorites = false;
 
-  Future<bool> hasConnection() async {
-    bool aux = await connectivityService.isConnectedToWifi();
-    setState(() {
-      isConnected = aux;
-    });
-
-    return isConnected;
-  }
-
   @override
   void initState() {
     super.initState();
@@ -47,14 +38,12 @@ class _HomescreenState extends State<Homescreen> with TickerProviderStateMixin {
   }
 
   void checkConnectivityAndFetchList() async {
-    hasConnection();
+    isConnected = await connectivityService.isConnectedToWifi();
     if (isConnected) {
       fetchList();
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('No internet connection. Please try again later.'),
-        ),
+        SnackBar(content: Text('No WiFi connection. Please connect to WiFi.')),
       );
     }
   }
@@ -164,7 +153,10 @@ class _HomescreenState extends State<Homescreen> with TickerProviderStateMixin {
   }
 
   Future<void> _navigateToDetail(BasicPokemon pokemon) async {
-    hasConnection();
+    bool aux = await connectivityService.isConnectedToWifi();
+    setState(() {
+      isConnected = aux;
+    });
     if (isConnected) {
       final detailedPokemon = await api.fetchPokemonDetails(pokemon.name);
       Navigator.push(
@@ -203,6 +195,10 @@ class _HomescreenState extends State<Homescreen> with TickerProviderStateMixin {
           ),
         ),
         actions: [
+          IconButton(
+            icon: Icon(Icons.refresh),
+            onPressed: checkConnectivityAndFetchList,
+          ),
           IconButton(
             icon: Icon(showFavorites ? Icons.favorite : Icons.favorite_border),
             onPressed: () {
@@ -382,28 +378,14 @@ class _HomescreenState extends State<Homescreen> with TickerProviderStateMixin {
                                       width: 100,
                                     ),
                                     SizedBox(height: 16),
-                                    isConnected
-                                        ? Text(
-                                            'No Pokémon found',
-                                            style: TextStyle(
-                                              fontSize: 18 * textScaleFactor,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                            textAlign: TextAlign.center,
-                                          )
-                                        : GestureDetector(
-                                            onTap: () {
-                                              checkConnectivityAndFetchList();
-                                            },
-                                            child: Text(
-                                              'No internet connection. Please tap to try again.',
-                                              style: TextStyle(
-                                                fontSize: 18 * textScaleFactor,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                              textAlign: TextAlign.center,
-                                            ),
-                                          ),
+                                    Text(
+                                      'No Pokémon found',
+                                      style: TextStyle(
+                                        fontSize: 18 * textScaleFactor,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
                                   ],
                                 ),
                               ),
