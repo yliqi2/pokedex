@@ -4,11 +4,10 @@ A simple Pokedex application built with Flutter that fetches Pokémon data from 
 
 ## Features
 
-- Infinite scrolling to load more Pokémon as you scroll.
 - Search functionality to find Pokémon by name.
 - Filter Pokémon by types.
 - Pull-to-refresh feature to reload the Pokémon list.
-- Beautiful grid-based UI with Pokémon images and names.
+- Beautiful grid-based + list-based UI with Pokémon images and names.
 - Error handling for API requests.
 - Favorite Pokémon functionality with local storage.
 - Notifications for favorite Pokémon changes.
@@ -19,9 +18,9 @@ A simple Pokedex application built with Flutter that fetches Pokémon data from 
 ## Screenshots
 
 <p align="center">
-  <img src="https://github.com/yliqi2/pokedex/blob/main/result/mainui.png" alt="Pokedex Screenshot 1" width="400" />
-  <img src="https://github.com/yliqi2/pokedex/blob/main/result/details.png" alt="Pokedex Screenshot 2" width="400" />
-  <img src="https://github.com/yliqi2/pokedex/blob/main/result/poisonbyid.png" alt="Pokedex Screenshot 3" width="400" />
+  <img src="https://github.com/yliqi2/pokedex/blob/main/result/mainui.png" alt="Pokedex Screenshot 1" width="250" />
+  <img src="https://github.com/yliqi2/pokedex/blob/main/result/details.png" alt="Pokedex Screenshot 2" width="250" />
+  <img src="https://github.com/yliqi2/pokedex/blob/main/result/poisonbyid.png" alt="Pokedex Screenshot 3" width="250" />
 </p>
 
 <p align="center">
