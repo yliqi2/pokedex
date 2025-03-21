@@ -40,7 +40,7 @@ class _MyAppState extends State<MyApp> {
       darkTheme: ThemeData(
         brightness: Brightness.dark,
         primarySwatch: Colors.red,
-        scaffoldBackgroundColor: Colors.black87,
+        scaffoldBackgroundColor: Color(0xFF1C1C1C),
         appBarTheme: AppBarTheme(
           backgroundColor: Colors.red,
           foregroundColor: Colors.white,

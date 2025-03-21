@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:pokedex/model/pokemon.dart';
+import 'package:pokedex/model/basic_pokemon.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:pokedex/service/noti_service.dart';
-import 'package:pokedex/service/shared_prefs.dart'; // Update this import
+import 'package:pokedex/service/shared_prefs.dart';
 
 class Pokemontile extends StatefulWidget {
-  final Pokemon pokemon;
-  final VoidCallback onFavoriteChanged; // Add this line
-  const Pokemontile(
-      {super.key,
-      required this.pokemon,
-      required this.onFavoriteChanged}); // Update this line
+  final BasicPokemon pokemon;
+  final VoidCallback onFavoriteChanged;
+  const Pokemontile({
+    super.key,
+    required this.pokemon,
+    required this.onFavoriteChanged,
+  });
 
   @override
   State<Pokemontile> createState() => _PokemontileState();
@@ -43,7 +44,7 @@ class _PokemontileState extends State<Pokemontile> {
       title: isFavorite
           ? '${widget.pokemon.name} added to favorites'
           : '${widget.pokemon.name} removed from favorites',
-    ); // Add this line
+    );
   }
 
   @override
@@ -71,9 +72,13 @@ class _PokemontileState extends State<Pokemontile> {
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Stack(
-                  alignment: Alignment.center, // Add this line
+                  alignment: Alignment.center,
                   children: [
-                    Positioned.fill(
+                    Positioned(
+                      top: 0,
+                      left: 0,
+                      right: 0,
+                      bottom: 0,
                       child: Opacity(
                         opacity: 0.3,
                         child: Image.asset(
@@ -85,7 +90,8 @@ class _PokemontileState extends State<Pokemontile> {
                     Hero(
                       tag: 'pokemon_image_${widget.pokemon.id}',
                       child: CachedNetworkImage(
-                        imageUrl: widget.pokemon.imageUrl,
+                        imageUrl:
+                            'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${widget.pokemon.id}.png',
                         fit: BoxFit.contain,
                         height: 130,
                         placeholder: (context, url) => Center(

@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:pokedex/model/pokemon.dart';
+import 'package:pokedex/model/basic_pokemon.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:pokedex/service/noti_service.dart';
-import 'package:pokedex/service/shared_prefs.dart'; // Update this import
+import 'package:pokedex/service/shared_prefs.dart';
 
 class PokemonListTile extends StatefulWidget {
-  final Pokemon pokemon;
-  final VoidCallback onFavoriteChanged; // Add this line
-  const PokemonListTile(
-      {super.key,
-      required this.pokemon,
-      required this.onFavoriteChanged}); // Update this line
+  final BasicPokemon pokemon;
+  final VoidCallback onFavoriteChanged;
+  const PokemonListTile({
+    super.key,
+    required this.pokemon,
+    required this.onFavoriteChanged,
+  });
 
   @override
   State<PokemonListTile> createState() => _PokemonListTileState();
@@ -37,7 +38,7 @@ class _PokemonListTileState extends State<PokemonListTile> {
     setState(() {
       isFavorite = !isFavorite;
     });
-    widget.onFavoriteChanged(); // Add this line
+    widget.onFavoriteChanged();
     NotiService().showNotification(
       id: widget.pokemon.id,
       title: isFavorite
@@ -80,7 +81,8 @@ class _PokemonListTileState extends State<PokemonListTile> {
               Hero(
                 tag: 'pokemon_image_${widget.pokemon.id}',
                 child: CachedNetworkImage(
-                  imageUrl: widget.pokemon.imageUrl,
+                  imageUrl:
+                      'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${widget.pokemon.id}.png',
                   fit: BoxFit.contain,
                   height: 80,
                   width: 80,

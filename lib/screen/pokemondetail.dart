@@ -23,7 +23,12 @@ class PokemonDetail extends StatelessWidget {
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
-            expandedHeight: 300.0,
+            expandedHeight: 250.0,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.vertical(
+                bottom: Radius.circular(30),
+              ),
+            ),
             pinned: true,
             flexibleSpace: FlexibleSpaceBar(
               centerTitle: true,

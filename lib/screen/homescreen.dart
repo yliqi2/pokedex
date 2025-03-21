@@ -1,11 +1,11 @@
-import 'package:pokedex/model/pokemon.dart';
+import 'package:pokedex/model/basic_pokemon.dart';
 import 'package:pokedex/service/pokeapi.dart';
 import 'package:flutter/material.dart';
 import 'package:pokedex/widgets/pokemontile.dart';
-import 'package:pokedex/widgets/pokemondetail.dart';
+import 'package:pokedex/screen/pokemondetail.dart';
 import 'package:pokedex/widgets/pokemonlisttile.dart';
-import 'package:pokedex/service/connectivity.dart'; // Add this import
-import 'package:pokedex/service/shared_prefs.dart'; // Add this import
+import 'package:pokedex/service/connectivity.dart';
+import 'package:pokedex/service/shared_prefs.dart';
 import 'dart:async';
 
 class Homescreen extends StatefulWidget {
@@ -17,11 +17,10 @@ class Homescreen extends StatefulWidget {
 }
 
 class _HomescreenState extends State<Homescreen> with TickerProviderStateMixin {
-  List<Pokemon> pokemons = [];
-  List<Pokemon> filteredPokemons = [];
+  List<BasicPokemon> pokemons = [];
+  List<BasicPokemon> filteredPokemons = [];
   final Pokeapi api = Pokeapi();
-  final ConnectivityService connectivityService =
-      ConnectivityService(); // Add this line
+  final ConnectivityService connectivityService = ConnectivityService();
   bool isLoading = false;
   final ScrollController _scrollController = ScrollController();
   TextEditingController searchController = TextEditingController();
@@ -30,7 +29,7 @@ class _HomescreenState extends State<Homescreen> with TickerProviderStateMixin {
   String sortBy = 'ID';
   bool isGridView = true;
   bool isConnected = true;
-  bool showFavorites = false; // Add this line
+  bool showFavorites = false;
 
   @override
   void initState() {
@@ -52,7 +51,7 @@ class _HomescreenState extends State<Homescreen> with TickerProviderStateMixin {
     });
 
     try {
-      List<Pokemon> newPokemons = await api.getPokemon();
+      List<BasicPokemon> newPokemons = await api.fetchAllPokemonBasic();
       setState(() {
         pokemons = newPokemons;
         filteredPokemons = pokemons;
@@ -376,15 +375,17 @@ class _HomescreenState extends State<Homescreen> with TickerProviderStateMixin {
                                 ),
                                 itemCount: filteredPokemons.length,
                                 itemBuilder: (context, index) {
-                                  final Pokemon pokemon =
+                                  final BasicPokemon pokemon =
                                       filteredPokemons[index];
                                   return GestureDetector(
-                                    onTap: () {
+                                    onTap: () async {
+                                      final detailedPokemon = await api
+                                          .fetchPokemonDetails(pokemon.name);
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (context) =>
-                                              PokemonDetail(pokemon: pokemon),
+                                          builder: (context) => PokemonDetail(
+                                              pokemon: detailedPokemon),
                                         ),
                                       );
                                     },
@@ -402,8 +403,7 @@ class _HomescreenState extends State<Homescreen> with TickerProviderStateMixin {
                                       ),
                                       child: Pokemontile(
                                         pokemon: pokemon,
-                                        onFavoriteChanged:
-                                            _onFavoriteChanged, // Update this line
+                                        onFavoriteChanged: _onFavoriteChanged,
                                       ),
                                     ),
                                   );
@@ -413,15 +413,17 @@ class _HomescreenState extends State<Homescreen> with TickerProviderStateMixin {
                                 controller: _scrollController,
                                 itemCount: filteredPokemons.length,
                                 itemBuilder: (context, index) {
-                                  final Pokemon pokemon =
+                                  final BasicPokemon pokemon =
                                       filteredPokemons[index];
                                   return GestureDetector(
-                                    onTap: () {
+                                    onTap: () async {
+                                      final detailedPokemon = await api
+                                          .fetchPokemonDetails(pokemon.name);
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (context) =>
-                                              PokemonDetail(pokemon: pokemon),
+                                          builder: (context) => PokemonDetail(
+                                              pokemon: detailedPokemon),
                                         ),
                                       );
                                     },
@@ -439,8 +441,7 @@ class _HomescreenState extends State<Homescreen> with TickerProviderStateMixin {
                                       ),
                                       child: PokemonListTile(
                                         pokemon: pokemon,
-                                        onFavoriteChanged:
-                                            _onFavoriteChanged, // Update this line
+                                        onFavoriteChanged: _onFavoriteChanged,
                                       ),
                                     ),
                                   );
@@ -462,13 +463,15 @@ class _HomescreenState extends State<Homescreen> with TickerProviderStateMixin {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
+        onPressed: () async {
           if (filteredPokemons.isNotEmpty) {
             final randomPokemon = (filteredPokemons..shuffle()).first;
+            final detailedPokemon =
+                await api.fetchPokemonDetails(randomPokemon.name);
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => PokemonDetail(pokemon: randomPokemon),
+                builder: (context) => PokemonDetail(pokemon: detailedPokemon),
               ),
             );
           }
