@@ -1,21 +1,21 @@
-# Pokedex App
+# 📚 Pokedex App
 
-A simple Pokedex application built with Flutter that fetches Pokémon data from the PokéAPI and displays it in a user-friendly interface.
+A simple 📱 Pokedex application built with Flutter that fetches Pokémon data from the PokéAPI and displays it in a user-friendly interface.
 
-## Features
+## ✨ Features
 
-- Search functionality to find Pokémon by name.
-- Filter Pokémon by types.
-- Pull-to-refresh feature to reload the Pokémon list.
-- Beautiful grid-based + list-based UI with Pokémon images and names.
-- Error handling for API requests.
-- Favorite Pokémon functionality with local storage.
-- Notifications for favorite Pokémon changes.
-- Random Pokémon details button to view details of a random Pokémon.
-- Option to switch between grid view and list view.
-- Theme change functionality to toggle between light and dark modes.
+- 🔎 **Search Pokémon** by name.
+- 🎭 **Filter Pokémon** by types.
+- 🔄 **Pull-to-refresh** feature to reload the Pokémon list.
+- 🗄️ **Beautiful UI** with grid and list views displaying Pokémon images and names.
+- ⚠️ **Error handling** for API requests.
+- ⭐ **Favorite Pokémon** functionality with local storage.
+- 📢 **Notifications** for favorite Pokémon changes.
+- 🎮 **Random Pokémon** details button.
+- 🔀 **Toggle grid & list views**.
+- 🌙 **Dark mode & light mode** theme switching.
 
-## Screenshots
+## 📸 Screenshots
 
 <p align="center">
   <img src="https://github.com/yliqi2/pokedex/blob/main/result/mainui.png" alt="Pokedex Screenshot 1" width="250" />
@@ -24,84 +24,68 @@ A simple Pokedex application built with Flutter that fetches Pokémon data from 
 </p>
 
 <p align="center">
-  <a href="https://github.com/yliqi2/pokedex/blob/main/result/">View all screenshots</a>
+  🔗 <a href="https://github.com/yliqi2/pokedex/blob/main/result/">View all screenshots</a>
 </p>
 
-## Installation
+## 🛠 Installation
 
-1. **Clone the repository:**
+1. **📝 Clone the repository:**
    ```sh
    git clone https://github.com/yliqi2/pokedex.git
    cd pokedex
    ```
 
-2. **Install dependencies:**
+2. **📦 Install dependencies:**
    ```sh
    flutter pub get
    ```
 
-3. **Run the application:**
+3. **▶️ Run the application:**
    ```sh
    flutter run
    ```
 
-## Technologies Used & Dependencies
+## 🚀 Technologies Used & Dependencies
 
-### Technologies Used
+### 🔹 Technologies Used
 
-- **[Flutter](https://flutter.dev/)**: An open-source mobile application development framework created by Google. It uses the Dart programming language to build native apps for iOS and Android with a single codebase.
-- **[Dart](https://dart.dev/)**: A programming language developed by Google, used to write mobile, web, and server applications. It is the base language on which Flutter runs.
+- 🎯 **[Flutter](https://flutter.dev/)** - Google’s UI toolkit for building beautiful apps.
+- 💻 **[Dart](https://dart.dev/)** - The programming language used by Flutter.
 
-### Dependencies
+### 📞 Dependencies
 
-This project uses the following dependencies:
+- `flutter` - Flutter SDK.
+- `http` - Fetch data from PokéAPI.
+- `shared_preferences` - Store favorite Pokémon locally.
+- `flutter_local_notifications` - Display local notifications.
 
-- `flutter`: The Flutter SDK, used for building the mobile application.
-- `http`: A package to make HTTP requests to retrieve data from external APIs (in this case, PokéAPI).
-- `shared_preferences`: A package to store favorite Pokémon locally.
-- `flutter_local_notifications`: A package to display local notifications.
+Check `pubspec.yaml` for a full list. 📛
 
-Make sure to check `pubspec.yaml` for the complete list.
+## 🔗 API Usage
 
-## API Usage
+- **📜 List of Pokémon:** `https://pokeapi.co/api/v2/pokemon?limit=1302`
+  - Retrieves all available Pokémon.
+- **📊 Pokémon Details:** `https://pokeapi.co/api/v2/pokemon/{name}`
+  - Fetches details such as ID, types, stats, and images.
 
-This application fetches data from the [PokéAPI](https://pokeapi.co/). It retrieves a list of Pokémon and their details using the following endpoints:
+## 🎮 Random Pokémon Button
 
-- **List of Pokémon**: `https://pokeapi.co/api/v2/pokemon?limit=1302`
-  - This endpoint returns a list of Pokémon with basic information such as name and URL for detailed information.
-  - The `limit` parameter specifies the number of Pokémon to retrieve. In this case, it retrieves all available Pokémon.
+Press the 🎮 button to view details of a random Pokémon!
 
-- **Pokémon Details**: `https://pokeapi.co/api/v2/pokemon/{name}`
-  - This endpoint returns detailed information about a specific Pokémon, including its ID, types, stats, weight, height, and image URL.
-  - The `{name}` parameter should be replaced with the name of the Pokémon to fetch its details.
+## 🎨 Grid View & List View
 
-The application uses these endpoints to fetch and display Pokémon data, including their images, types, and other characteristics.
+Easily switch between 📌 grid and 🎜 list views using the toggle button in the app bar.
 
-## Random Pokémon Details Button
+## 🍗 Theme Change
 
-The application includes a floating action button that, when pressed, selects a random Pokémon from the filtered list and navigates to its detail page. This feature allows users to explore different Pokémon without having to search for them manually.
+Toggle between 🌞 **light mode** and 🌙 **dark mode** for better viewing experience.
 
-## Grid View and List View
+## 🔍 Search & Filtering
 
-The application provides an option to switch between grid view and list view for displaying Pokémon. Users can toggle between these views using the corresponding button in the app bar. The grid view displays Pokémon in a grid layout, while the list view displays them in a vertical list.
+- 🔎 **Search** Pokémon by name.
+- 🏷️ **Filter** Pokémon by type.
 
-## Theme Change Functionality
-
-The application includes a theme change functionality that allows users to toggle between light and dark modes. This can be done using the theme change button in the app bar. The selected theme is applied throughout the application.
-
-## Search Functionality and Filtering by Types
-
-The application includes a search bar that allows users to search for Pokémon by name. Additionally, users can filter Pokémon by their types using the dropdown menu. This makes it easy to find specific Pokémon based on their type or name.
-
-For more details, download and explore the project.
-
-## Download
-
-You can download the project directly from the following link:
-
-[Download Pokedex App](https://github.com/yliqi2/pokedex/archive/refs/heads/main.zip)
-
-## Project Structure
+## 📂 Project Structure
 
 ```
 📂 lib/
@@ -122,13 +106,18 @@ You can download the project directly from the following link:
 ├── main.dart
 ```
 
-## Contributions
+## 📝 Download
+<p align="right">
+  <a href="https://github.com/yliqi2/pokedex/releases/tag/v1.1" target="_blank">
+    <img src="https://img.shields.io/badge/Download-Pokedex%20App-blue?style=for-the-badge&logo=flutter" alt="Download Button">
+  </a>
+</p>
 
-Contributions are welcome! If you find any bugs or have feature suggestions, feel free to open an issue or submit a pull request.
+## 🤝 Contributions
 
-## Author
+Contributions are welcome! If you find any bugs 🐛 or have feature suggestions 💡, feel free to open an issue or submit a pull request.
+
+## 👤 Author
 
 [![yliqi2 GitHub](https://img.shields.io/badge/Visit%20yliqi2%20on%20GitHub-000000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/yliqi2)
-
-
 
