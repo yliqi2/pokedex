@@ -19,6 +19,8 @@ class PokemonDetail extends StatelessWidget {
                 0xFF000000))
         .toList();
 
+    final maxStatValue = pokemon.stats.values.reduce((a, b) => a > b ? a : b);
+
     return Scaffold(
       body: CustomScrollView(
         slivers: [
@@ -253,7 +255,8 @@ class PokemonDetail extends StatelessWidget {
                                                 ),
                                               ),
                                               FractionallySizedBox(
-                                                widthFactor: entry.value / 100,
+                                                widthFactor:
+                                                    entry.value / maxStatValue,
                                                 child: Container(
                                                   height: 6,
                                                   decoration: BoxDecoration(
