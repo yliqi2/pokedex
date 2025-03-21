@@ -71,6 +71,7 @@ class _PokemontileState extends State<Pokemontile> {
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Stack(
+                  alignment: Alignment.center, // Add this line
                   children: [
                     Positioned.fill(
                       child: Opacity(
@@ -86,7 +87,7 @@ class _PokemontileState extends State<Pokemontile> {
                       child: CachedNetworkImage(
                         imageUrl: widget.pokemon.imageUrl,
                         fit: BoxFit.contain,
-                        height: 100,
+                        height: 130,
                         placeholder: (context, url) => Center(
                           child: Image.asset(
                             'assets/loading_pokemon.gif',
