@@ -4,11 +4,10 @@ A simple Pokedex application built with Flutter that fetches Pokémon data from 
 
 ## Features
 
-- Infinite scrolling to load more Pokémon as you scroll.
 - Search functionality to find Pokémon by name.
 - Filter Pokémon by types.
 - Pull-to-refresh feature to reload the Pokémon list.
-- Beautiful grid-based UI with Pokémon images and names.
+- Beautiful grid-based + list-based UI with Pokémon images and names.
 - Error handling for API requests.
 - Favorite Pokémon functionality with local storage.
 - Notifications for favorite Pokémon changes.
