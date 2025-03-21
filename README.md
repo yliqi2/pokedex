@@ -96,6 +96,12 @@ The application includes a search bar that allows users to search for Pokémon b
 
 For more details, download and explore the project.
 
+## Download
+
+You can download the project directly from the following link:
+
+[Download Pokedex App](https://github.com/yliqi2/pokedex/archive/refs/heads/main.zip)
+
 ## Project Structure
 
 ```
