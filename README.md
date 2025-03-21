@@ -52,7 +52,6 @@ A simple Pokedex application built with Flutter that fetches Pokémon data from 
 
 - **[Flutter](https://flutter.dev/)**: An open-source mobile application development framework created by Google. It uses the Dart programming language to build native apps for iOS and Android with a single codebase.
 - **[Dart](https://dart.dev/)**: A programming language developed by Google, used to write mobile, web, and server applications. It is the base language on which Flutter runs.
-- **[flutter_local_notifications](https://pub.dev/packages/flutter_local_notifications)**: A Flutter plugin for displaying local notifications.
 
 ### Dependencies
 
