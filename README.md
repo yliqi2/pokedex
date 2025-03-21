@@ -19,7 +19,13 @@ A simple Pokedex application built with Flutter that fetches Pokémon data from 
 ## Screenshots
 
 <p align="center">
-  <img src="https://github.com/yliqi2/pokedex/blob/main/result/mainscreen.png" alt="Pokedex Screenshot" width="400" />
+  <img src="https://github.com/yliqi2/pokedex/blob/main/result/mainui.png" alt="Pokedex Screenshot 1" width="400" />
+  <img src="https://github.com/yliqi2/pokedex/blob/main/result/details.png" alt="Pokedex Screenshot 2" width="400" />
+  <img src="https://github.com/yliqi2/pokedex/blob/main/result/poisonbyid.png" alt="Pokedex Screenshot 3" width="400" />
+</p>
+
+<p align="center">
+  <a href="https://github.com/yliqi2/pokedex/blob/main/result/">View all screenshots</a>
 </p>
 
 ## Installation
@@ -46,8 +52,6 @@ A simple Pokedex application built with Flutter that fetches Pokémon data from 
 
 - **[Flutter](https://flutter.dev/)**: An open-source mobile application development framework created by Google. It uses the Dart programming language to build native apps for iOS and Android with a single codebase.
 - **[Dart](https://dart.dev/)**: A programming language developed by Google, used to write mobile, web, and server applications. It is the base language on which Flutter runs.
-- **[http](https://pub.dev/packages/http)**: A Dart package used to make HTTP requests. It allows making network requests, such as those used to fetch data from the PokéAPI in this project.
-- **[shared_preferences](https://pub.dev/packages/shared_preferences)**: A Flutter plugin for reading and writing simple key-value pairs. It is used to store favorite Pokémon locally.
 - **[flutter_local_notifications](https://pub.dev/packages/flutter_local_notifications)**: A Flutter plugin for displaying local notifications.
 
 ### Dependencies
