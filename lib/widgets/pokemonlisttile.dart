@@ -26,6 +26,14 @@ class _PokemonListTileState extends State<PokemonListTile> {
     _checkIfFavorite();
   }
 
+  @override
+  void didUpdateWidget(PokemonListTile oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.pokemon.id != widget.pokemon.id) {
+      _checkIfFavorite();
+    }
+  }
+
   Future<void> _checkIfFavorite() async {
     final favorite = await SharedPrefs.isFavorite(widget.pokemon.id);
     setState(() {
@@ -34,14 +42,15 @@ class _PokemonListTileState extends State<PokemonListTile> {
   }
 
   Future<void> _toggleFavorite() async {
+    final newFavoriteStatus = !isFavorite;
     await SharedPrefs.toggleFavorite(widget.pokemon.id);
     setState(() {
-      isFavorite = !isFavorite;
+      isFavorite = newFavoriteStatus;
     });
     widget.onFavoriteChanged();
     NotiService().showNotification(
       id: widget.pokemon.id,
-      title: isFavorite
+      title: newFavoriteStatus
           ? '${widget.pokemon.name} added to favorites'
           : '${widget.pokemon.name} removed from favorites',
     );

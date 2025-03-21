@@ -31,6 +31,15 @@ class _HomescreenState extends State<Homescreen> with TickerProviderStateMixin {
   bool isConnected = true;
   bool showFavorites = false;
 
+  Future<bool> hasConnection() async {
+    bool aux = await connectivityService.isConnectedToWifi();
+    setState(() {
+      isConnected = aux;
+    });
+
+    return isConnected;
+  }
+
   @override
   void initState() {
     super.initState();
@@ -38,9 +47,15 @@ class _HomescreenState extends State<Homescreen> with TickerProviderStateMixin {
   }
 
   void checkConnectivityAndFetchList() async {
-    isConnected = await connectivityService.isConnectedToWifi();
+    hasConnection();
     if (isConnected) {
       fetchList();
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('No internet connection. Please try again later.'),
+        ),
+      );
     }
   }
 
@@ -148,6 +163,24 @@ class _HomescreenState extends State<Homescreen> with TickerProviderStateMixin {
     filterByType();
   }
 
+  Future<void> _navigateToDetail(BasicPokemon pokemon) async {
+    hasConnection();
+    if (isConnected) {
+      final detailedPokemon = await api.fetchPokemonDetails(pokemon.name);
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => PokemonDetail(pokemon: detailedPokemon),
+        ),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+            content: Text('No internet connection. Please try again later.')),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -155,7 +188,6 @@ class _HomescreenState extends State<Homescreen> with TickerProviderStateMixin {
     final textScaleFactor = screenWidth > 600 ? 1.5 : 1.0;
 
     return Scaffold(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         surfaceTintColor: Colors.transparent,
         backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
@@ -190,7 +222,9 @@ class _HomescreenState extends State<Homescreen> with TickerProviderStateMixin {
           ),
           IconButton(
             icon: Icon(Icons.brightness_6),
-            onPressed: widget.toggleTheme,
+            onPressed: () {
+              widget.toggleTheme();
+            },
           ),
         ],
       ),
@@ -348,16 +382,28 @@ class _HomescreenState extends State<Homescreen> with TickerProviderStateMixin {
                                       width: 100,
                                     ),
                                     SizedBox(height: 16),
-                                    Text(
-                                      isConnected
-                                          ? 'No Pokémon found'
-                                          : 'No internet connection. Please try again later.',
-                                      style: TextStyle(
-                                        fontSize: 18 * textScaleFactor,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                      textAlign: TextAlign.center,
-                                    ),
+                                    isConnected
+                                        ? Text(
+                                            'No Pokémon found',
+                                            style: TextStyle(
+                                              fontSize: 18 * textScaleFactor,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                            textAlign: TextAlign.center,
+                                          )
+                                        : GestureDetector(
+                                            onTap: () {
+                                              checkConnectivityAndFetchList();
+                                            },
+                                            child: Text(
+                                              'No internet connection. Please tap to try again.',
+                                              style: TextStyle(
+                                                fontSize: 18 * textScaleFactor,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                              textAlign: TextAlign.center,
+                                            ),
+                                          ),
                                   ],
                                 ),
                               ),
@@ -378,17 +424,7 @@ class _HomescreenState extends State<Homescreen> with TickerProviderStateMixin {
                                   final BasicPokemon pokemon =
                                       filteredPokemons[index];
                                   return GestureDetector(
-                                    onTap: () async {
-                                      final detailedPokemon = await api
-                                          .fetchPokemonDetails(pokemon.name);
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => PokemonDetail(
-                                              pokemon: detailedPokemon),
-                                        ),
-                                      );
-                                    },
+                                    onTap: () => _navigateToDetail(pokemon),
                                     child: ScaleTransition(
                                       scale: Tween<double>(begin: 0.8, end: 1.0)
                                           .animate(
@@ -416,17 +452,7 @@ class _HomescreenState extends State<Homescreen> with TickerProviderStateMixin {
                                   final BasicPokemon pokemon =
                                       filteredPokemons[index];
                                   return GestureDetector(
-                                    onTap: () async {
-                                      final detailedPokemon = await api
-                                          .fetchPokemonDetails(pokemon.name);
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => PokemonDetail(
-                                              pokemon: detailedPokemon),
-                                        ),
-                                      );
-                                    },
+                                    onTap: () => _navigateToDetail(pokemon),
                                     child: ScaleTransition(
                                       scale: Tween<double>(begin: 0.8, end: 1.0)
                                           .animate(
