@@ -72,7 +72,8 @@ class PokemonDetail extends StatelessWidget {
                     child: Hero(
                       tag: 'pokemon_image_${pokemon.id}',
                       child: CachedNetworkImage(
-                        imageUrl: pokemon.imageUrl,
+                        imageUrl:
+                            'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemon.id}.png',
                         fit: BoxFit.contain,
                         height: 150,
                         placeholder: (context, url) => Center(

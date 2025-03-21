@@ -1,7 +1,6 @@
 import 'basic_pokemon.dart';
 
 class Pokemon extends BasicPokemon {
-  final String imageUrl;
   final double weight;
   final double height;
   final Map<String, int> stats;
@@ -10,7 +9,6 @@ class Pokemon extends BasicPokemon {
     required super.id,
     required super.name,
     required super.types,
-    required this.imageUrl,
     required this.weight,
     required this.height,
     required this.stats,
@@ -24,8 +22,6 @@ class Pokemon extends BasicPokemon {
               ?.map((type) => type['type']['name'] as String)
               .toList() ??
           [],
-      imageUrl:
-          json['sprites']['other']['official-artwork']['front_default'] ?? '',
       weight: (json['weight'] ?? 0) / 10,
       height: (json['height'] ?? 0) / 10,
       stats: {
