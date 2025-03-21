@@ -1,4 +1,4 @@
-# 📖 Pokedex App
+# 📚 Pokedex App
 
 A simple 📱 Pokedex application built with Flutter that fetches Pokémon data from the PokéAPI and displays it in a user-friendly interface.
 
@@ -7,11 +7,11 @@ A simple 📱 Pokedex application built with Flutter that fetches Pokémon data 
 - 🔎 **Search Pokémon** by name.
 - 🎭 **Filter Pokémon** by types.
 - 🔄 **Pull-to-refresh** feature to reload the Pokémon list.
-- 🖼️ **Beautiful UI** with grid and list views displaying Pokémon images and names.
+- 🗄️ **Beautiful UI** with grid and list views displaying Pokémon images and names.
 - ⚠️ **Error handling** for API requests.
 - ⭐ **Favorite Pokémon** functionality with local storage.
-- 🔔 **Notifications** for favorite Pokémon changes.
-- 🎲 **Random Pokémon** details button.
+- 📢 **Notifications** for favorite Pokémon changes.
+- 🎮 **Random Pokémon** details button.
 - 🔀 **Toggle grid & list views**.
 - 🌙 **Dark mode & light mode** theme switching.
 
@@ -29,7 +29,7 @@ A simple 📱 Pokedex application built with Flutter that fetches Pokémon data 
 
 ## 🛠 Installation
 
-1. **📥 Clone the repository:**
+1. **📝 Clone the repository:**
    ```sh
    git clone https://github.com/yliqi2/pokedex.git
    cd pokedex
@@ -52,14 +52,14 @@ A simple 📱 Pokedex application built with Flutter that fetches Pokémon data 
 - 🎯 **[Flutter](https://flutter.dev/)** - Google’s UI toolkit for building beautiful apps.
 - 💻 **[Dart](https://dart.dev/)** - The programming language used by Flutter.
 
-### 📦 Dependencies
+### 📞 Dependencies
 
 - `flutter` - Flutter SDK.
 - `http` - Fetch data from PokéAPI.
 - `shared_preferences` - Store favorite Pokémon locally.
 - `flutter_local_notifications` - Display local notifications.
 
-Check `pubspec.yaml` for a full list. 📜
+Check `pubspec.yaml` for a full list. 📛
 
 ## 🔗 API Usage
 
@@ -68,15 +68,15 @@ Check `pubspec.yaml` for a full list. 📜
 - **📊 Pokémon Details:** `https://pokeapi.co/api/v2/pokemon/{name}`
   - Fetches details such as ID, types, stats, and images.
 
-## 🎲 Random Pokémon Button
+## 🎮 Random Pokémon Button
 
-Press the 🎲 button to view details of a random Pokémon!
+Press the 🎮 button to view details of a random Pokémon!
 
 ## 🎨 Grid View & List View
 
-Easily switch between 📌 grid and 📜 list views using the toggle button in the app bar.
+Easily switch between 📌 grid and 🎜 list views using the toggle button in the app bar.
 
-## 🌗 Theme Change
+## 🍗 Theme Change
 
 Toggle between 🌞 **light mode** and 🌙 **dark mode** for better viewing experience.
 
@@ -105,8 +105,10 @@ Toggle between 🌞 **light mode** and 🌙 **dark mode** for better viewing exp
 │   ├── pokemondetail.dart
 ├── main.dart
 ```
+
+## 📝 Download
 <p align="right">
-  <a href="https://github.com/yliqi2/pokedex/archive/refs/heads/main.zip" target="_blank">
+  <a href="https://github.com/yliqi2/pokedex/releases/tag/v1.1" target="_blank">
     <img src="https://img.shields.io/badge/Download-Pokedex%20App-blue?style=for-the-badge&logo=flutter" alt="Download Button">
   </a>
 </p>
@@ -114,8 +116,6 @@ Toggle between 🌞 **light mode** and 🌙 **dark mode** for better viewing exp
 ## 🤝 Contributions
 
 Contributions are welcome! If you find any bugs 🐛 or have feature suggestions 💡, feel free to open an issue or submit a pull request.
-## 📥 Download
-
 
 ## 👤 Author
 
