@@ -85,10 +85,6 @@ Toggle between 🌞 **light mode** and 🌙 **dark mode** for better viewing exp
 - 🔎 **Search** Pokémon by name.
 - 🏷️ **Filter** Pokémon by type.
 
-## 📥 Download
-
-📂 [Download Pokedex App](https://github.com/yliqi2/pokedex/archive/refs/heads/main.zip)
-
 ## 📂 Project Structure
 
 ```
@@ -109,15 +105,19 @@ Toggle between 🌞 **light mode** and 🌙 **dark mode** for better viewing exp
 │   ├── pokemondetail.dart
 ├── main.dart
 ```
+<p align="right">
+  <a href="https://github.com/yliqi2/pokedex/archive/refs/heads/main.zip" target="_blank">
+    <img src="https://img.shields.io/badge/Download-Pokedex%20App-blue?style=for-the-badge&logo=flutter" alt="Download Button">
+  </a>
+</p>
 
 ## 🤝 Contributions
 
 Contributions are welcome! If you find any bugs 🐛 or have feature suggestions 💡, feel free to open an issue or submit a pull request.
+## 📥 Download
+
 
 ## 👤 Author
 
 [![yliqi2 GitHub](https://img.shields.io/badge/Visit%20yliqi2%20on%20GitHub-000000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/yliqi2)
-
-
-
 
